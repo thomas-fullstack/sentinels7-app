@@ -1,0 +1,13 @@
+{
+  "appId": "com.ternstartechnologies.sentinels7",
+  "appName": "SentinelS7",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

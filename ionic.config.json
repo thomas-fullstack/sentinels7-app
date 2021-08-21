@@ -1,0 +1,7 @@
+{
+  "name": "SentinelS7",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
