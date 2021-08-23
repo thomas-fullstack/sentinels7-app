@@ -167,7 +167,7 @@ export default defineComponent({
       coolantTemperature: "Not Available",
       procTemp: "Not Available",
       oilPressure: "Not Available",
-      sentinels7FeedApiUrl: "https://u2whl2h723.execute-api.us-east-1.amazonaws.com/sentinels7/feed",
+      sentinels7FeedApiUrl: "https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/feed",
       mapboxLocationMarker: null,
       previousLocation: null,
       mapObj: null,

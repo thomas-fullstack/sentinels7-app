@@ -65,8 +65,8 @@ export default defineComponent({
     return {
       email: null,
       password: null,
-      sentinels7ServerApiLoginUrl: "https://u2whl2h723.execute-api.us-east-1.amazonaws.com/sentinels7/oauth/token",
-      sentinels7FeedApiUrl: "https://u2whl2h723.execute-api.us-east-1.amazonaws.com/sentinels7/feed"
+      sentinels7ServerApiLoginUrl: "https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/oauth/token",
+      sentinels7FeedApiUrl: "https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/feed"
     };
   },
   methods: {
