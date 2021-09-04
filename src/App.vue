@@ -296,10 +296,10 @@ ion-split-pane{
 }
 
 ion-buttons{
- background: rgb(96, 143, 245);
+ background: rgb(52, 52, 60);
 }
 ion-menu-button{
-  background: rgb(96, 143, 245);
+  background: rgb(52, 52, 60);
   color: whitesmoke;
 }
 .sentinels7-logo{
