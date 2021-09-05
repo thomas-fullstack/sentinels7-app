@@ -16,7 +16,7 @@
     <ion-card-content>
       <ion-card-title>{{userDetails.company}} - Select Device</ion-card-title>
       <ion-item>
-      <ion-select v-model="selectedDevice" @ionChange="selectedDeviceChanged($event)" :value="selectedDevice" placeholder="Select One"  >
+      <ion-select :interface-options="customAlertOptions" v-model="selectedDevice" @ionChange="selectedDeviceChanged($event)" :value="selectedDevice" placeholder="Select One"  >
         <ion-select-option  v-for="(item, index) in devicesList" v-bind:key="index" :value="item.alias">{{item.alias}}</ion-select-option>
       </ion-select>
       </ion-item>
@@ -154,7 +154,11 @@ import { Plugins } from '@capacitor/core';
 export default defineComponent({
   components: { IonPage, IonSpinner, IonSelect,IonSelectOption,IonItem, IonRow, IonCol, IonProgressBar, IonSegment, IonSegmentButton , IonCard, IonButton, IonRange, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle, IonRadio, IonRadioGroup},
   setup() {
-    return {  };
+    const customAlertOptions = {
+      header: 'Switch between your devices: ',
+      translucent: true
+    };
+    return { customAlertOptions };
   },
   data() {
     return {
@@ -398,7 +402,7 @@ export default defineComponent({
     getLatestData: function() {
         this.refreshInProgress = true
         console.log("Called getLatestData")
-        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "timescale": true };
+        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company};
         console.log(requestParams)
         const headers = this.getApiHeaders()
         axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
@@ -568,4 +572,5 @@ ion-spinner{
 
   color: #fff;
 }
+
 </style>
