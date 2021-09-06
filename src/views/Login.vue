@@ -106,12 +106,13 @@ export default defineComponent({
                   .then(
                     response2 => {
                       console.log(response2)
-                      if(response2 && response2.data && response2.data.length > 0)
+                      if(response2 && response2.data && response2.data.company_name)
                         {
                             this.openToast("Sign In Successful!", "success")
                             const user = {
                               email: this.email,
-                              company: response2.data,
+                              company: response2.data.company_name,
+                              userAppConfig: response2.data.user_app_config,
                               idToken: response.data.id_token,
                               refreshToken: response.data.refresh_token
                             }

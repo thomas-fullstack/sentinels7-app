@@ -107,44 +107,12 @@
       </ion-card-subtitle>
     </ion-card-content>
   </ion-card>
-  <ion-card v-show="activeSegment == 'enginecontrol'">
-    <ion-card-content>
-      <ion-card-title>Set Engine Data Refresh Frequency</ion-card-title>
-      <ion-radio-group>
-
-      <!-- <ion-item>
-        <ion-label>Start</ion-label>
-        <ion-radio slot="start" value="start" v-on:click="startFeed"></ion-radio>
-      </ion-item> -->
-
-      <ion-item>
-        <ion-label>High (Every 5 seconds)</ion-label>
-        <ion-radio slot="start" value="high" v-on:click="setFrequency('high_frequency')"></ion-radio>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>Medium (Every 30 seconds)</ion-label>
-        <ion-radio slot="start" value="medium" v-on:click="setFrequency('medium_frequency')"></ion-radio>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label>Low (Every 60 seconds)</ion-label>
-        <ion-radio slot="start" value="low" v-on:click="setFrequency('low_frequency')"></ion-radio>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>Stop</ion-label>
-        <ion-radio slot="start" value="Stop" v-on:click="stopFeed"></ion-radio>
-      </ion-item>
-    </ion-radio-group>
-    </ion-card-content>
-  </ion-card>
 </ion-content>
 </ion-page>
 </template>
 
 <script>
-import { IonPage, loadingController, IonSpinner, IonSelect, IonSelectOption, IonItem, IonRow, IonCol, IonProgressBar , IonSegment, IonSegmentButton, IonCard, IonButton, IonRange, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle, alertController, toastController, IonRadio, IonRadioGroup } from '@ionic/vue';
+import { IonPage, loadingController, IonSpinner, IonSelect, IonSelectOption, IonItem, IonRow, IonCol, IonProgressBar , IonSegment, IonSegmentButton, IonCard, IonButton, IonRange, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle, alertController, toastController} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -152,7 +120,7 @@ import mapboxgl from 'mapbox-gl';
 import { Plugins } from '@capacitor/core';
 
 export default defineComponent({
-  components: { IonPage, IonSpinner, IonSelect,IonSelectOption,IonItem, IonRow, IonCol, IonProgressBar, IonSegment, IonSegmentButton , IonCard, IonButton, IonRange, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle, IonRadio, IonRadioGroup},
+  components: { IonPage, IonSpinner, IonSelect,IonSelectOption,IonItem, IonRow, IonCol, IonProgressBar, IonSegment, IonSegmentButton , IonCard, IonButton, IonRange, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle},
   setup() {
     const customAlertOptions = {
       header: 'Switch between your devices: ',
@@ -180,6 +148,7 @@ export default defineComponent({
       mapboxAccessToken: 'pk.eyJ1Ijoic2Fua3M4NyIsImEiOiJjandzaXd6aGQwNGRkNGJxandoeW8wMHBvIn0.SUM7QRlgn8Vr5nmvOowDVQ',
       devicesList: null,
       selectedDevice: null,
+      selectedDeviceId: null,
       lastKnownLocationString: null,
       refreshInProgress: false,
       userDetails: {}
@@ -270,6 +239,8 @@ export default defineComponent({
       console.log('Device changed', ev);
       // console.log(ev.target.value)
       this.selectedDevice = ev.target.value
+      this.selectedDeviceId = this.devicesList.find(x => x.alias === this.selectedDevice).id;
+      this.updateDefaultDeviceIdinAppConfig(this.selectedDeviceId)
       this.momentPublished = null
       this.publishedAt = "Not Available"
       this.engineData = []
@@ -484,6 +455,42 @@ export default defineComponent({
                 this.openToast("Engine Data Refresh Frequency set to " + frequencyType)
         })
     },
+    updateDefaultDeviceIdinAppConfig: function(id) {
+        const currentUserEmail = this.userDetails.email;
+        const requestParams = {
+                    "email": currentUserEmail,
+                    "key": "default_device_id",
+                    "value": id.toString()
+                  };
+        const headers = this.getApiHeaders()
+        axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
+        .then(
+            response => {
+                console.log("Set Device to Default")
+                // this.openToast("Set Device to Default")
+        })
+    },
+    setPartialPublish: function(isPartialPublish) {
+        let isPartialOrFullPublish = "full_publish"
+        if(isPartialPublish === 'true')
+        {
+          isPartialOrFullPublish = "partial_publish"
+        }
+        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "partial_or_full_publish":isPartialOrFullPublish};
+        const headers = this.getApiHeaders()
+        axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
+        .then(
+            response => {
+              if(isPartialPublish === 'true'){
+                console.log("Partial Engine Data Publish is Enabled")
+                this.openToast("Partial Engine Data Publish is Enabled")
+              } else {
+                console.log("Full Engine Data Publish is Enabled")
+                this.openToast("Full Engine Data Publish is Enabled")
+              }
+
+        })
+    },
     startEngine: function() {
         const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "engine_start":true};
         const headers = this.getApiHeaders()
@@ -527,6 +534,25 @@ export default defineComponent({
     // this.presentLoading()
     this.getDevicesList()
     this.initMap()
+    // This needs to be written better where we parse config item by type
+    // let default_device_id = this.userDetails.userAppConfig[0].value
+    // let devices_data_partial_publish = this.userDetails.userAppConfig[2].value
+
+    const vm = this // eslint-disable-line
+    setTimeout(function() {
+      const devicesDataRefreshFrequency = vm.userDetails.userAppConfig.find(x => x.key === 'devices_data_refresh_frequency').value;
+      const defaultDeviceId = parseInt(vm.userDetails.userAppConfig.find(x => x.key === 'default_device_id').value);
+      const selectedDevice = vm.devicesList.find(x => x.id === defaultDeviceId).alias;
+      vm.selectedDevice = selectedDevice
+      console.log("Default Device Id:" + defaultDeviceId)
+      vm.setFrequency(devicesDataRefreshFrequency)
+      
+    }, 5000);
+    setTimeout(function() {
+      const devicesDataPartialPublish = vm.userDetails.userAppConfig.find(x => x.key === 'devices_data_partial_publish').value;
+      vm.setPartialPublish(devicesDataPartialPublish)
+    }, 7000);
+
   },
   beforeUnmount() {
     clearInterval(this.timer)
