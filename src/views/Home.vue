@@ -88,6 +88,7 @@
           </ion-row>
         </div>
       </div>
+      <!-- Test -->
       <!-- <ion-card-subtitle>Battery Voltage: <b>{{batteryvoltage}}</b> <span v-if="batteryvoltage != 'Not Available'">Volts</span></ion-card-subtitle>
       <ion-card-subtitle>Engine Speed: <b>{{engineSpeed}}</b> <span v-if="engineSpeed != 'Not Available'">RPM</span></ion-card-subtitle>
       <ion-card-subtitle>Coolant Temperature: <b>{{coolantTemperature}}</b> <span v-if="coolantTemperature != 'Not Available'">&deg;F</span></ion-card-subtitle>
