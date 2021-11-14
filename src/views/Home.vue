@@ -74,7 +74,9 @@
 
     <ion-card-content>
       <ion-card-title>Engine Data</ion-card-title>
-      <div v-if="engineData.length < 1">Not Available</div>
+      
+      <div v-if="engineData.length < 1 || deviceData[2].value == 'Not Available'">Not Available</div>
+      <div v-if="engineData.length > 0 && deviceData[2].value == 'Available'">
         <div v-for="(item) in engineData" v-bind:key="item.alias">
           <ion-row>
             <ion-col size="auto">
@@ -85,6 +87,7 @@
             </ion-col>
           </ion-row>
         </div>
+      </div>
       <!-- <ion-card-subtitle>Battery Voltage: <b>{{batteryvoltage}}</b> <span v-if="batteryvoltage != 'Not Available'">Volts</span></ion-card-subtitle>
       <ion-card-subtitle>Engine Speed: <b>{{engineSpeed}}</b> <span v-if="engineSpeed != 'Not Available'">RPM</span></ion-card-subtitle>
       <ion-card-subtitle>Coolant Temperature: <b>{{coolantTemperature}}</b> <span v-if="coolantTemperature != 'Not Available'">&deg;F</span></ion-card-subtitle>
@@ -386,12 +389,12 @@ export default defineComponent({
                     // console.log(this.deviceId)
                     this.momentPublished = moment(this.latestFeed.published_at)
                     this.publishedAt = this.momentPublished.format('MM-DD-YYYY [at] hh:mm:ss A') + " (" + this.momentPublished.fromNow() + ")";
-                    this.deviceData = this.latestFeed.holding_registers.slice(0, 7)
-                    this.engineData = this.latestFeed.holding_registers.slice(7, this.latestFeed.holding_registers.length)
+                    this.deviceData = this.latestFeed.holding_registers.slice(0, 8)
+                    this.engineData = this.latestFeed.holding_registers.slice(8, this.latestFeed.holding_registers.length)
                     console.log(this.deviceData)
                     console.log(this.engineData)
 
-                    this.setMapLocation(this.deviceData[3].value, this.deviceData[2].value)
+                    this.setMapLocation(this.deviceData[4].value, this.deviceData[3].value)
                     // this.setMapLocation(-98.0335974,30.3080553)
                     
                     
