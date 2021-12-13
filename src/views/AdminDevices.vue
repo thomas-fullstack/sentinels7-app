@@ -279,6 +279,8 @@ export default defineComponent({
         center: [-88.4402269, 48.0427248],
         zoom: 1,
       })
+      // Add zoom and rotation controls to the map.
+      this.mapObj.addControl(new mapboxgl.NavigationControl());
 
       this.timer = setInterval(() => {
                 this.mapObj.resize()
