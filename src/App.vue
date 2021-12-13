@@ -19,21 +19,13 @@
             <ion-note>{{currentUserEmail}}</ion-note>
   
             <ion-menu-toggle auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i;logout()" router-direction="root" :router-link="p.url" lines="none" detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+              <ion-item @click="selectedIndex = i;clickedMenuItem(p)" router-direction="root" :router-link="p.url" lines="none" detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <ion-icon slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
   
-          <!-- <ion-list id="labels-list">
-            <ion-list-header>Labels</ion-list-header>
-  
-            <ion-item v-for="(label, index) in labels" lines="none" :key="index">
-              <ion-icon slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
-            </ion-item>
-          </ion-list> -->
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
@@ -45,7 +37,7 @@
 import { IonHeader, IonTitle, IonToolbar, IonButtons, IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp, homeSharp, homeOutline,logOutOutline, logOut } from 'ionicons/icons';
+import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp, albumsSharp, albumsOutline, mapSharp, mapOutline,logOutOutline, logOut } from 'ionicons/icons';
 import { authService } from './services/AuthService';
 
 export default defineComponent({
@@ -72,49 +64,18 @@ export default defineComponent({
     const selectedIndex = ref(0);
     const appPages = [
       {
-        title: 'Home',
-        url: '/home',
-        iosIcon: homeOutline,
-        mdIcon: homeSharp
+        title: 'Overview',
+        url: '/overview',
+        iosIcon: mapOutline,
+        mdIcon: mapSharp
       },
       {
         title: 'Logout',
         url: '/logout',
         iosIcon: logOutOutline,
         mdIcon: logOut
-      },
-      // {
-      //   title: 'Outbox',
-      //   url: '/folder/Outbox',
-      //   iosIcon: paperPlaneOutline,
-      //   mdIcon: paperPlaneSharp
-      // },
-      // {
-      //   title: 'Favorites',
-      //   url: '/folder/Favorites',
-      //   iosIcon: heartOutline,
-      //   mdIcon: heartSharp
-      // },
-      // {
-      //   title: 'Archived',
-      //   url: '/folder/Archived',
-      //   iosIcon: archiveOutline,
-      //   mdIcon: archiveSharp
-      // },
-      // {
-      //   title: 'Trash',
-      //   url: '/folder/Trash',
-      //   iosIcon: trashOutline,
-      //   mdIcon: trashSharp
-      // },
-      // {
-      //   title: 'Spam',
-      //   url: '/folder/Spam',
-      //   iosIcon: warningOutline,
-      //   mdIcon: warningSharp
-      // }
+      }
     ];
-    const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
     
     const path = window.location.pathname.split('folder/')[1];
     if (path !== undefined) {
@@ -126,7 +87,6 @@ export default defineComponent({
     return { 
       selectedIndex,
       appPages, 
-      labels,
       archiveOutline, 
       archiveSharp, 
       bookmarkOutline, 
@@ -150,27 +110,60 @@ export default defineComponent({
     }
   },
   methods: {
-    logout() {
-    // remove user from local storage to log user out
-    authService.logout()
-    this.$router.push({ path: '/login' })
-    location.reload()
+    clickedMenuItem(item: any) {
+    console.log(item)
+    if(item.title === 'Logout')
+    {
+      // remove user from local storage to log user out
+      authService.logout()
+      this.$router.push({ path: '/login' })
+      location.reload()
+    }
     }
   },
   mounted() {
     if (localStorage.getItem('user')) {
+      this.userDetails = JSON.parse(localStorage.getItem('user'));
       this.currentUserEmail = JSON.parse(localStorage.getItem('user')).email;
+      this.currentUserIsAdmin = this.userDetails.userAppConfig.find((x: any) => x.key === 'user_is_admin').value
+      if(this.currentUserIsAdmin && this.currentUserIsAdmin === 'true'){
+      this.appPages = [
+      {
+        title: 'Overview',
+        url: '/overview',
+        iosIcon: mapOutline,
+        mdIcon: mapSharp
+      },
+      {
+        title: 'Admin Devices',
+        url: '/admindevices',
+        iosIcon: albumsOutline,
+        mdIcon: albumsSharp
+      },
+      {
+        title: 'Logout',
+        url: '/logout',
+        iosIcon: logOutOutline,
+        mdIcon: logOut
+      }
+    ];
+      }
     }
   },
   data() {
     return {
-      currentUserEmail: null
+      currentUserEmail: null,
+      userDetails: null,
+      currentUserIsAdmin: null
     };
   }
 });
 </script>
 
 <style scoped>
+ion-menu {
+  width:200px;
+}
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }

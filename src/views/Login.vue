@@ -117,7 +117,7 @@ export default defineComponent({
                               refreshToken: response.data.refresh_token
                             }
                             localStorage.setItem('user', JSON.stringify(user));
-                            this.$router.push({ path: '/home' })
+                            this.$router.push({ path: '/overview' })
                             setTimeout(function() {
                               location.reload()
                             }, 200);
