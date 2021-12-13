@@ -164,7 +164,7 @@ export default defineComponent({
                       }
                     })
 
-                    const popupText = item.device_alias 
+                    const popupText = '<b>' + item.device_alias + '</b>'
                     + '<br/> <a href="https://www.google.com/maps?saddr=My+Location&daddr='+ lat +',' + lng + '" target="_blank">Get Driving Directions</a>'
                     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
                     popupText
