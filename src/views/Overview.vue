@@ -156,12 +156,30 @@ export default defineComponent({
                       if(deviceFeedItem.alias === 'GPS Longitude'){
                         lng = deviceFeedItem.value
                       }
-                      if(deviceFeedItem.alias === 'Amber Warning Lamp' || deviceFeedItem.alias === 'Red Stop Lamp'){
+                      let redStopLampOn = false
+                      let amberWarningLampOn = false
+                      if(deviceFeedItem.alias === 'Red Stop Lamp'){
                         if(deviceFeedItem.value === 'On, Solid' || deviceFeedItem.value === 'On, Flashing')
                         {
-                          markerColor = "#b40219"
+                          redStopLampOn = true
                         }
                       }
+                      if(deviceFeedItem.alias === 'Amber Warning Lamp'){
+                        if(deviceFeedItem.value === 'On, Solid' || deviceFeedItem.value === 'On, Flashing')
+                        {
+                          amberWarningLampOn = true
+                        }
+                      }
+                      if(redStopLampOn && amberWarningLampOn){
+                        markerColor = "#b40219"
+                      } else if(amberWarningLampOn)
+                      {
+                        markerColor = "#ffbf00"
+                      } else if(redStopLampOn){
+                        markerColor = "#b40219"
+                      }
+
+                      
                     })
 
                     const popupText = '<b>' + item.device_alias + '</b>'
