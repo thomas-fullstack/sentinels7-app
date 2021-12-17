@@ -133,7 +133,7 @@ export default defineComponent({
                 }
                 this.latestDevicesFeed = response.data
                 // console.log(this.latestDevicesFeed)
-                const deviceFeedItemsToKeep = ['Key Position', 'Inlet Pressure', 'Flow Rate', 'Engine Speed', 'Outlet Pressure 1', 'Battery Voltage', 'Engine Coolant Temp', 'Engine Oil Pressure', 'Fuel Level', 'Amber Warning Lamp', 'Red Stop Lamp']
+                const deviceFeedItemsToKeep = ['GPS Latitude', 'GPS Longitude', 'Key Position', 'Inlet Pressure', 'Flow Rate', 'Engine Speed', 'Outlet Pressure 1', 'Battery Voltage', 'Engine Coolant Temp', 'Engine Oil Pressure', 'Fuel Level', 'Amber Warning Lamp', 'Red Stop Lamp']
                 // .holding_registers
                 this.latestDevicesFeed.forEach(function(item) {
                   if(item.device_feed){
@@ -188,19 +188,22 @@ export default defineComponent({
                     popupText
                     );
 
-                    // console.log("Filtered Items")
-                    // console.log(deviceFeedItemsFiltered)
-                    // Add new marker
-                    const mapboxLocationMarker = new mapboxgl.Marker({ 
-                      // "color": "#b40219" 
-                      "color": markerColor
-                      })
-                    .setLngLat([lng, lat])
-                    .setPopup(popup)
-                    .addTo(mapObj);
-                    bounds.extend([lng, lat])
-                    mapboxLocationMarkers.push(mapboxLocationMarker)
-                    // this.setGoogleDrivingDirectionsLink(lng, lat)
+                    if(lat && !isNaN(lat) && lng && !isNaN(lng)){
+                      // console.log("Filtered Items")
+                      // console.log(deviceFeedItemsFiltered)
+                      // Add new marker
+                      const mapboxLocationMarker = new mapboxgl.Marker({ 
+                        // "color": "#b40219" 
+                        "color": markerColor
+                        })
+                      .setLngLat([lng, lat])
+                      .setPopup(popup)
+                      .addTo(mapObj);
+                      bounds.extend([lng, lat])
+                      mapboxLocationMarkers.push(mapboxLocationMarker)
+                      // this.setGoogleDrivingDirectionsLink(lng, lat)
+                    }
+
                     item.device_feed['holding_registers'] = deviceFeedItemsFiltered
                   }
                 }
