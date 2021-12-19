@@ -143,7 +143,7 @@ export default defineComponent({
       coolantTemperature: "Not Available",
       procTemp: "Not Available",
       oilPressure: "Not Available",
-      sentinels7FeedApiUrl: "https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/feed",
+      sentinels7FeedApiUrl: '',
       mapboxLocationMarker: null,
       previousLocation: null,
       mapObj: null,
@@ -534,6 +534,13 @@ export default defineComponent({
     }
   },
   mounted() {
+    // If url contains dev or localhost point API calls to dev
+    if(window.location.href.includes('dev') || window.location.href.includes('localhost')){
+      this.sentinels7FeedApiUrl = 'https://ch0ufg0209.execute-api.us-east-1.amazonaws.com/dev-sentinels7/feed'
+    } else { // Point API calls to prod
+      this.sentinels7FeedApiUrl = 'https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/feed'
+    }
+
     if (localStorage.getItem('user')) {
       this.userDetails = JSON.parse(localStorage.getItem('user'));
     }

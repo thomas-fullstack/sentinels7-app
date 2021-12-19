@@ -65,8 +65,8 @@ export default defineComponent({
     return {
       email: null,
       password: null,
-      sentinels7ServerApiLoginUrl: "https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/oauth/token",
-      sentinels7FeedApiUrl: "https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/feed"
+      sentinels7ServerApiLoginUrl: '',
+      sentinels7FeedApiUrl: ''
     };
   },
   methods: {
@@ -139,6 +139,16 @@ export default defineComponent({
 
         }
       }
+  },
+  mounted() {
+    // If url contains dev or localhost point API calls to dev
+    if(window.location.href.includes('dev') || window.location.href.includes('localhost')){
+      this.sentinels7ServerApiLoginUrl = 'https://ch0ufg0209.execute-api.us-east-1.amazonaws.com/dev-sentinels7/oauth/token'
+      this.sentinels7FeedApiUrl = 'https://ch0ufg0209.execute-api.us-east-1.amazonaws.com/dev-sentinels7/feed'
+    } else { // Point API calls to prod
+      this.sentinels7ServerApiLoginUrl = 'https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/oauth/token'
+      this.sentinels7FeedApiUrl = 'https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/feed'
+    }
   }
 });
 </script>

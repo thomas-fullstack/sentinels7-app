@@ -73,7 +73,7 @@ export default defineComponent({
     return {
       mapObj: null,
       mapboxAccessToken: 'pk.eyJ1Ijoic2Fua3M4NyIsImEiOiJjandzaXd6aGQwNGRkNGJxandoeW8wMHBvIn0.SUM7QRlgn8Vr5nmvOowDVQ',
-      sentinels7FeedApiUrl: "https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/feed",
+      sentinels7FeedApiUrl: '',
       refreshInProgress: false,
       latestDevicesFeed: null,
       userDetails: {},
@@ -145,6 +145,7 @@ export default defineComponent({
                     let lng = null
                     // Green by default
                     let markerColor = "#02b40b"
+                    item.device_feed.holding_registers.sort((a, b) => a.order - b.order);
                     item.device_feed.holding_registers.forEach(function(deviceFeedItem) {
                       // console.log(deviceFeedItems)
                       if(deviceFeedItemsToKeep.includes(deviceFeedItem.alias)){
@@ -223,6 +224,13 @@ export default defineComponent({
     }
   },
   mounted() {
+    // If url contains dev or localhost point API calls to dev
+    if(window.location.href.includes('dev') || window.location.href.includes('localhost')){
+      this.sentinels7FeedApiUrl = 'https://ch0ufg0209.execute-api.us-east-1.amazonaws.com/dev-sentinels7/feed'
+    } else { // Point API calls to prod
+      this.sentinels7FeedApiUrl = 'https://zj9ih8yjcj.execute-api.us-east-1.amazonaws.com/sentinels7/feed'
+    }
+
     if (localStorage.getItem('user')) {
       this.userDetails = JSON.parse(localStorage.getItem('user'));
     }
