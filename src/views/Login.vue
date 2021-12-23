@@ -142,7 +142,7 @@ export default defineComponent({
   },
   mounted() {
     // If url contains dev or localhost point API calls to dev
-    if(window.location.href.includes('-dev') || window.location.href.includes('localhost')){
+    if(window.location.href.includes('dev.') || window.location.href.includes('localhost')){
       this.sentinels7ServerApiLoginUrl = 'https://ch0ufg0209.execute-api.us-east-1.amazonaws.com/dev-sentinels7/oauth/token'
       this.sentinels7FeedApiUrl = 'https://ch0ufg0209.execute-api.us-east-1.amazonaws.com/dev-sentinels7/feed'
     } else { // Point API calls to prod
