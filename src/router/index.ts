@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import AdminDevices from '../views/AdminDevices.vue'
 import Overview from '../views/Overview.vue'
+import Reports from '../views/Reports.vue'
 import Login from '../views/Login.vue'
 import NotFound from '../views/NotFound.vue'
 
@@ -17,6 +18,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/admindevices',
     component: AdminDevices
+  },
+  {
+    path: '/reports',
+    component: Reports
   },
   {
     path: '/login',
