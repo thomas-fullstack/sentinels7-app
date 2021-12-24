@@ -1,11 +1,13 @@
 <template>
   <IonApp>
     <ion-header>
-      <ion-buttons start>
+      <ion-buttons start >
         <ion-menu-button v-if="currentRouteName != '/login'"></ion-menu-button>
         <img class="sentinels7-logo" src="./assets/img/icon.png" alt="your image">
         <ion-toolbar>
-            <ion-title>SentinelS7</ion-title>
+            <ion-title v-if="!isSiteDev">SentinelS7 </ion-title>
+            <ion-title class="ionbuttonsdev" color="red" v-else>SentinelS7 Development Site</ion-title>
+            
         </ion-toolbar>
       </ion-buttons>
       
@@ -118,6 +120,10 @@ export default defineComponent({
       authService.logout()
       this.$router.push({ path: '/login' })
       location.reload()
+    } else{
+      setTimeout(function() {
+                    location.reload()
+                  }, 200);
     }
     }
   },
@@ -149,12 +155,20 @@ export default defineComponent({
     ];
       }
     }
+
+    // If url contains dev or localhost point API calls to dev
+    if(window.location.href.includes('dev.') || window.location.href.includes('localhost')){
+      this.isSiteDev = true
+    } else { 
+      this.isSiteDev = false
+    }
   },
   data() {
     return {
       currentUserEmail: null,
       userDetails: null,
-      currentUserIsAdmin: null
+      currentUserIsAdmin: null,
+      isSiteDev: false
     };
   }
 });
@@ -291,6 +305,12 @@ ion-split-pane{
 ion-buttons{
  background: rgb(52, 52, 60);
 }
+
+.ionbuttonsdev{
+  color: red;
+  font-weight: bold;
+}
+
 ion-menu-button{
   background: rgb(52, 52, 60);
   color: whitesmoke;

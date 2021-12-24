@@ -367,7 +367,7 @@ export default defineComponent({
 
             }).catch(error => {
                 console.log(error)
-                if(error && error.response && error.response.status)
+                if(error)
                 {
                   this.$router.push({ path: '/login' })
                   setTimeout(function() {
@@ -422,7 +422,7 @@ export default defineComponent({
                 this.refreshInProgress = false
             }).catch(error => {
                 console.log(error)
-                if(error && error.response && error.response.status)
+                if(error)
                 {
                   this.$router.push({ path: '/login' })
                   setTimeout(function() {
