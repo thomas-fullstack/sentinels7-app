@@ -39,7 +39,7 @@
 import { IonHeader, IonTitle, IonToolbar, IonButtons, IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp, albumsSharp, albumsOutline, mapSharp, mapOutline,logOutOutline, logOut } from 'ionicons/icons';
+import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp, albumsSharp, albumsOutline, bookOutline, bookSharp, mapSharp, mapOutline,logOutOutline, logOut } from 'ionicons/icons';
 import { authService } from './services/AuthService';
 
 export default defineComponent({
@@ -145,6 +145,12 @@ export default defineComponent({
         url: '/admindevices',
         iosIcon: albumsOutline,
         mdIcon: albumsSharp
+      },
+      {
+        title: 'Reports',
+        url: '/reports',
+        iosIcon: bookOutline,
+        mdIcon: bookSharp
       },
       {
         title: 'Logout',
