@@ -18,6 +18,7 @@
     "@vuelidate/validators": "^2.0.0-alpha.12",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "firebase": "^9.6.1",
     "mapbox-gl": "^2.1.1",
     "moment": "^2.29.1",
     "vee-validate": "^4.2.1",
