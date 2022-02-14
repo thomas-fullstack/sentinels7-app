@@ -45,7 +45,9 @@
                       <ion-card-subtitle v-else float-right >{{item.alias}}: <b>{{item.value}}</b> <span v-if="item.value != 'Not Available'">{{item.unit}}</span> </ion-card-subtitle>
 
                 </div>
+                <ion-button size="small" v-on:click="openEngineControlModal(item)" shape="round">Engine Control</ion-button>
               </div>
+              <div v-else>Device Status: Offline</div>
             </ion-col>
           </ion-row>
         </ion-card>
@@ -58,7 +60,8 @@
 </template>
 
 <script>
-import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonButton, IonCard, IonCardTitle, IonCardSubtitle, IonSpinner, IonBadge} from '@ionic/vue';
+import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonButton, IonCard, IonCardTitle, IonCardSubtitle, IonSpinner, IonBadge, alertController, modalController } from '@ionic/vue';
+import EngineControlModal from './EngineControlModal.vue'
 import { defineComponent } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -221,6 +224,20 @@ export default defineComponent({
                   }, 200);
                 }
             });
+    },
+    async openEngineControlModal(item) {
+      const modal = await modalController
+        .create({
+          component: EngineControlModal,
+          cssClass: 'my-custom-class',
+          componentProps: {
+            title: 'Engine Control',
+            userDetails: this.userDetails,
+            selectedItem: item,
+            sentinels7FeedApiUrl: this.sentinels7FeedApiUrl
+          },
+        })
+      return modal.present();
     }
   },
   mounted() {
