@@ -212,7 +212,10 @@ export default defineComponent({
                   }
                 }
                 })
-                mapObj.fitBounds(bounds, {padding: 100});
+                
+                if(!bounds.isEmpty()){
+                  mapObj.fitBounds(bounds, {padding: 100});
+                }
                 this.refreshInProgress = false
             }).catch(error => {
                 console.log(error)
