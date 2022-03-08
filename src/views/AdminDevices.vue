@@ -451,16 +451,6 @@ export default defineComponent({
                 this.openToast("Engine Data Refresh Stopped")
         })
     },
-    setFrequency: function(frequencyType) {
-        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "feed_frequency":frequencyType};
-        const headers = this.getApiHeaders()
-        axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
-        .then(
-            response => {
-                console.log("Engine Data Refresh Frequency set to " + frequencyType)
-                this.openToast("Engine Data Refresh Frequency set to " + frequencyType)
-        })
-    },
     updateDefaultDeviceIdinAppConfig: function(id) {
         const currentUserEmail = this.userDetails.email;
         const requestParams = {
@@ -474,27 +464,6 @@ export default defineComponent({
             response => {
                 console.log("Set Device to Default")
                 // this.openToast("Set Device to Default")
-        })
-    },
-    setPartialPublish: function(isPartialPublish) {
-        let isPartialOrFullPublish = "full_publish"
-        if(isPartialPublish === 'true')
-        {
-          isPartialOrFullPublish = "partial_publish"
-        }
-        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "partial_or_full_publish":isPartialOrFullPublish};
-        const headers = this.getApiHeaders()
-        axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
-        .then(
-            response => {
-              if(isPartialPublish === 'true'){
-                console.log("Partial Engine Data Publish is Enabled")
-                this.openToast("Partial Engine Data Publish is Enabled")
-              } else {
-                console.log("Full Engine Data Publish is Enabled")
-                this.openToast("Full Engine Data Publish is Enabled")
-              }
-
         })
     },
     startEngine: function() {
@@ -549,22 +518,15 @@ export default defineComponent({
     this.initMap()
     // This needs to be written better where we parse config item by type
     // let default_device_id = this.userDetails.userAppConfig[0].value
-    // let devices_data_partial_publish = this.userDetails.userAppConfig[2].value
 
     const vm = this // eslint-disable-line
     setTimeout(function() {
-      const devicesDataRefreshFrequency = vm.userDetails.userAppConfig.find(x => x.key === 'devices_data_refresh_frequency').value;
       const defaultDeviceId = parseInt(vm.userDetails.userAppConfig.find(x => x.key === 'default_device_id').value);
       const selectedDevice = vm.devicesList.find(x => x.id === defaultDeviceId).alias;
       vm.selectedDevice = selectedDevice
       console.log("Default Device Id:" + defaultDeviceId)
-      vm.setFrequency(devicesDataRefreshFrequency)
       
     }, 5000);
-    setTimeout(function() {
-      const devicesDataPartialPublish = vm.userDetails.userAppConfig.find(x => x.key === 'devices_data_partial_publish').value;
-      vm.setPartialPublish(devicesDataPartialPublish)
-    }, 7000);
 
   },
   beforeUnmount() {
