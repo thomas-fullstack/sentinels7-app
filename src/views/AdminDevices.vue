@@ -102,8 +102,8 @@
       <ion-card-subtitle>Start Engine: <ion-button color="success" v-on:click="presentAlertConfirmEngineStart">Start</ion-button></ion-card-subtitle>
       <ion-card-subtitle>Stop Engine: <ion-button color="danger" v-on:click="presentAlertConfirmEngineStop">Stop</ion-button></ion-card-subtitle>
       <br/>
-      <ion-card-subtitle>Engine Speed (in RPM): 
-          <ion-card-subtitle v-if="engineData.length > 1">Current Engine Speed: {{engineData[2].value}} <span v-if="engineData[2].value != 'Not Available'">{{engineData[2].unit}}</span></ion-card-subtitle>
+      <ion-card-subtitle>Engine Speed (in RPM):
+          <ion-card-subtitle v-if="engineData.length > 1">Current Engine Speed: {{engineData[1].value}} <span v-if="engineData[1].value != 'Not Available'">{{engineData[1].unit}}</span></ion-card-subtitle>
           <ion-range v-model="engineSpeed" v-on:ionChange="setEngineSpeed($event.target.value)" pin="true" min="800" max="2000" step="20" snaps="true" debounce="500" color="secondary">
                 <ion-label slot="start">800</ion-label>
                 <ion-label slot="end">2000</ion-label>
