@@ -136,7 +136,7 @@ export default defineComponent({
                 }
                 this.latestDevicesFeed = response.data
                 // console.log(this.latestDevicesFeed)
-                const deviceFeedItemsToKeep = ['GPS Latitude', 'GPS Longitude', 'Engine Hours', 'Fuel Rate', 'Key Position', 'Inlet Pressure', 'Flow Rate', 'Engine Speed', 'Outlet Pressure 1', 'Battery Voltage', 'Engine Coolant Temp', 'Engine Oil Pressure', 'Fuel Level', 'Amber Warning Lamp', 'Red Stop Lamp']
+                const deviceFeedItemsToKeep = ['GPS Latitude', 'GPS Longitude', 'Engine Hours', 'Fuel Rate', 'Key Position', 'Inlet Pressure', 'Control Transducer Level', 'Flow Rate', 'Engine Speed', 'Outlet Pressure 1', 'Battery Voltage', 'Engine Coolant Temp', 'Engine Oil Pressure', 'Fuel Level', 'Amber Warning Lamp', 'Red Stop Lamp']
                 // .holding_registers
                 this.latestDevicesFeed.forEach(function(item) {
                   if(item.device_feed){
