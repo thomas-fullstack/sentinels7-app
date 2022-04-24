@@ -156,5 +156,8 @@ export default defineComponent({
 ion-title{
     color: white;
 }
-
+ion-input{
+  border: solid 1px black;
+  max-width: 200px;
+}
 </style>

@@ -13,25 +13,25 @@
     <ion-card-subtitle><ion-button color="warning" v-on:click="setFaultReset">Fault Reset</ion-button></ion-card-subtitle>
     <br/>
     <ion-card-subtitle>Target Setpoint: 
-          <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current Target: {{selectedItem.device_feed.holding_registers[3].value}} <span v-if="selectedItem.device_feed.holding_registers[3].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[3].unit}}</span></ion-card-subtitle>
+          <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current Target: {{selectedItem.device_feed.holding_registers[7].value}} <span v-if="selectedItem.device_feed.holding_registers[7].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[7].unit}}</span></ion-card-subtitle>
           <ion-input type="number" v-model="targetSetpoint" min="0"></ion-input>
           <ion-button v-on:click="setTargetSetpoint">Set Target Setpoint</ion-button>
     </ion-card-subtitle>
     <br/>
     <ion-card-subtitle>High Pressure Limit: 
-          <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current High Limit: {{selectedItem.device_feed.holding_registers[3].value}} <span v-if="selectedItem.device_feed.holding_registers[3].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[3].unit}}</span></ion-card-subtitle>
+          <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current High Limit: {{selectedItem.device_feed.holding_registers[8].value}} <span v-if="selectedItem.device_feed.holding_registers[8].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[8].unit}}</span></ion-card-subtitle>
           <ion-input type="number" v-model="highPressureLimit" min="0"></ion-input>
           <ion-button v-on:click="setHighPressureLimit">Set High Pressure Limit</ion-button>
     </ion-card-subtitle>
     <br/>
     <ion-card-subtitle>High Pressure Shutdown: 
-          <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current High Shutdown: {{selectedItem.device_feed.holding_registers[3].value}} <span v-if="selectedItem.device_feed.holding_registers[3].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[3].unit}}</span></ion-card-subtitle>
+          <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current High Shutdown: {{selectedItem.device_feed.holding_registers[6].value}} <span v-if="selectedItem.device_feed.holding_registers[6].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[6].unit}}</span></ion-card-subtitle>
           <ion-input type="number" v-model="highPressureShutdown" min="0"></ion-input>
           <ion-button v-on:click="setHighPressureShutdown">Set High Pressure Shutdown</ion-button>
     </ion-card-subtitle>
     <br/>
       <ion-card-subtitle>Motor Speed (Actual Hz): 
-          <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current Motor Speed: {{selectedItem.device_feed.holding_registers[3].value}} <span v-if="selectedItem.device_feed.holding_registers[3].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[3].unit}}</span></ion-card-subtitle>
+          <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current Motor Speed: {{selectedItem.device_feed.holding_registers[0].value}} <span v-if="selectedItem.device_feed.holding_registers[0].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[0].unit}}</span></ion-card-subtitle>
           <ion-input type="number" v-model="motorSpeed" min="0" max="60" ></ion-input>
           <ion-button v-on:click="setMotorSpeed">Set Motor Speed</ion-button>
       </ion-card-subtitle>
@@ -268,5 +268,6 @@ ion-title{
 }
 ion-input{
   border: solid 1px black;
+  max-width: 200px;
 }
 </style>
