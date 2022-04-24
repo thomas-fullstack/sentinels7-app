@@ -10,17 +10,15 @@
       <br/>
       <ion-card-subtitle>Engine Speed (in RPM): 
           <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current Engine Speed: {{selectedItem.device_feed.holding_registers[3].value}} <span v-if="selectedItem.device_feed.holding_registers[3].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[3].unit}}</span></ion-card-subtitle>
-          <ion-range v-model="engineSpeed" v-on:ionChange="setEngineSpeed($event.target.value)" pin="true" min="800" max="2000" step="20" snaps="true" debounce="500" color="secondary">
-                <ion-label slot="start">800</ion-label>
-                <ion-label slot="end">2000</ion-label>
-          </ion-range>
+          <ion-input type="number" v-model="engineSpeed" min="800" max="2000" ></ion-input>
+          <ion-button v-on:click="setEngineSpeed">Set RPM</ion-button>
       </ion-card-subtitle>
     <ion-button v-on:click="closeModal">Close</ion-button>
   </ion-content>
 </template>
 
 <script>
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonCardSubtitle, IonLabel, IonRange, alertController, modalController, toastController } from '@ionic/vue';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonCardSubtitle, alertController, modalController, toastController, IonInput } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import axios from 'axios';
 
@@ -35,7 +33,7 @@ export default defineComponent({
   data() {
     return {
       content: 'Content',
-      engineSpeed: "Not Available"
+      engineSpeed: 800
     }
   },
   methods: {
@@ -132,23 +130,26 @@ export default defineComponent({
                 this.openToast("Engine stop command issued")
         })
     },
-    setEngineSpeed: function(setSpeedVal) {
-      this.engineSpeed = setSpeedVal
-      if(this.engineSpeed === parseInt(this.engineSpeed, 10)) {
-        // console.log(this.engineSpeed)
-        // console.log(setSpeedVal)
-          const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "engine_speed":setSpeedVal};
-          const headers = this.getApiHeaders()
-          axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
-          .then(
-              response => {
-                  console.log("Engine speed set command issued at: " + setSpeedVal + " RPM")
-                  this.openToast("Engine speed set command issued at: " + setSpeedVal + " RPM")
-          })
-      }
+    setEngineSpeed: function() {
+        if(this.engineSpeed >= 800 && this.engineSpeed <= 2000)
+        {
+          // console.log(this.engineSpeed)
+          // console.log(setSpeedVal)
+            const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "engine_speed":this.engineSpeed};
+            const headers = this.getApiHeaders()
+            axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
+            .then(
+                response => {
+                    console.log("Engine speed set command issued at: " + this.engineSpeed + " RPM")
+                    this.openToast("Engine speed set command issued at: " + this.engineSpeed + " RPM")
+            })
+        } else{
+          this.openToast("Error: Engine speed should should be set between 800 and 2000 RPM")
+        }
+      
     }
   },
-  components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonCardSubtitle, IonLabel, IonRange }
+  components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonCardSubtitle, IonInput }
 });
 </script>
 <style scoped>
