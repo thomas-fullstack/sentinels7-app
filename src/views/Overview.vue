@@ -17,7 +17,7 @@
           </ion-col>
         </ion-row>
       </ion-card>
-      <div v-for="(item) in latestDevicesFeed" v-bind:key="item.device_id">
+      <div v-for="(item) in latestDevicesCx7500Feed" v-bind:key="item.device_id">
         <ion-card>
           <ion-row>
             <ion-col size="auto">
@@ -45,7 +45,50 @@
                       <ion-card-subtitle v-else float-right >{{item.alias}}: <b>{{item.value}}</b> <span v-if="item.value != 'Not Available'">{{item.unit}}</span> </ion-card-subtitle>
 
                 </div>
-                <ion-button size="small" v-on:click="openEngineControlModal(item)" shape="round">Engine Control</ion-button>
+                <ion-button size="small" v-on:click="openEngineControlModal(item)" shape="round">Control</ion-button>
+              </div>
+              <div v-else>Device Status: Offline</div>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </div>
+
+      <div v-for="(item) in latestDevicesVfdX600Feed" v-bind:key="item.device_id">
+        <ion-card>
+          <ion-row>
+            <ion-col size="auto">
+              <ion-card-subtitle>Device Name: <b>{{item.device_alias}}</b></ion-card-subtitle>
+              <div v-if="item.device_feed && item.device_feed.holding_registers">
+                <ion-card-subtitle>Last Published At: <b>{{item.device_feed.publishedAt}}</b></ion-card-subtitle>
+                <div v-for="(item) in item.device_feed.coils" v-bind:key="item.alias">
+                    <ion-card-subtitle float-right v-if="item.alias === 'Auto Mode'">
+                       <span v-if="item.value === 'Auto'">{{item.alias}}: <b class="color-text-green">{{item.value}}</b>  <ion-badge class="color-full-green">O</ion-badge></span>
+                       <span v-else-if="item.value === 'Not Available'">{{item.alias}}: <b class="color-text-black">{{item.value}}</b>  <ion-badge class="color-full-black">O</ion-badge></span>
+                       <span v-else>{{item.alias}}: <b class="color-text-red">{{item.value}}</b>  <ion-badge class="color-full-red">O</ion-badge></span>
+                    </ion-card-subtitle>
+                </div>
+
+                <div v-for="(item) in item.device_feed.discrete_inputs" v-bind:key="item.alias">
+                      <ion-card-subtitle float-right v-if="item.alias === 'Red Stop Lamp'">
+                       <span v-if="item.value === 'On, Solid' || item.value === 'On, Flashing'">{{item.alias}}: <b class="color-text-red">{{item.value}}</b>  <ion-badge class="color-full-red">O</ion-badge></span>
+                       <span v-else>{{item.alias}}: <b class="color-text-black">{{item.value}}</b>  <ion-badge class="color-full-black">O</ion-badge></span>
+                  </ion-card-subtitle>
+                </div>
+
+                <div v-for="(item) in item.device_feed.coils" v-bind:key="item.alias">
+                      <ion-card-subtitle float-right v-if="item.alias === 'Amber Warning Lamp'">
+                       <span v-if="item.value === 'On, Solid' || item.value === 'On, Flashing'">{{item.alias}}: <b class="color-text-amber">{{item.value}}</b>  <ion-badge class="color-full-amber">O</ion-badge></span>
+                       <span v-else>{{item.alias}}: <b class="color-text-black">{{item.value}}</b>  <ion-badge class="color-full-black">O</ion-badge></span>
+                      </ion-card-subtitle>
+                </div>
+
+                <div v-for="(item) in item.device_feed.holding_registers" v-bind:key="item.alias">
+
+                      <ion-card-subtitle float-right >{{item.alias}}: <b>{{item.value}}</b> <span v-if="item.value != 'Not Available'">{{item.unit}}</span> </ion-card-subtitle>
+
+                </div>
+                
+                <ion-button size="small" v-on:click="openVfdControlModal(item)" shape="round">Control</ion-button>
               </div>
               <div v-else>Device Status: Offline</div>
             </ion-col>
@@ -62,6 +105,7 @@
 <script>
 import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonButton, IonCard, IonCardTitle, IonCardSubtitle, IonSpinner, IonBadge, alertController, modalController } from '@ionic/vue';
 import EngineControlModal from './EngineControlModal.vue'
+import VfdControlModal from './VfdControlModal.vue'
 import { defineComponent } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -78,7 +122,8 @@ export default defineComponent({
       mapboxAccessToken: 'pk.eyJ1Ijoic2Fua3M4NyIsImEiOiJjandzaXd6aGQwNGRkNGJxandoeW8wMHBvIn0.SUM7QRlgn8Vr5nmvOowDVQ',
       sentinels7FeedApiUrl: '',
       refreshInProgress: false,
-      latestDevicesFeed: null,
+      latestDevicesCx7500Feed: null,
+      latestDevicesVfdX600Feed: null,
       userDetails: {},
       mapboxLocationMarkers: [],
     };
@@ -134,11 +179,13 @@ export default defineComponent({
                     marker.remove();
                   })
                 }
-                this.latestDevicesFeed = response.data
-                // console.log(this.latestDevicesFeed)
-                const deviceFeedItemsToKeep = ['GPS Latitude', 'GPS Longitude', 'Engine Hours', 'Fuel Rate', 'Key Position', 'Inlet Pressure', 'Control Transducer Level', 'Flow Rate', 'Engine Speed', 'Outlet Pressure 1', 'Battery Voltage', 'Engine Coolant Temp', 'Engine Oil Pressure', 'Fuel Level', 'Amber Warning Lamp', 'Red Stop Lamp']
+                this.latestDevicesCx7500Feed = response.data.cx_7500.data
+                this.latestDevicesVfdX600Feed = response.data.vfd_x_600.data
+                // console.log(this.latestDevicesCx7500Feed)
+                const deviceCx7500FeedItemsToKeep = response.data.cx_7500.overview_fields
+                const deviceVfdX600FeedItemsToKeep = response.data.vfd_x_600.overview_fields
                 // .holding_registers
-                this.latestDevicesFeed.forEach(function(item) {
+                this.latestDevicesCx7500Feed.forEach(function(item) {
                   if(item.device_feed){
                     const momentPublished = moment(item.device_feed.published_at)
                     item.device_feed.publishedAt = momentPublished.format('MM-DD-YYYY [at] hh:mm:ss A') + " (" + momentPublished.fromNow() + ")";
@@ -151,7 +198,82 @@ export default defineComponent({
                     item.device_feed.holding_registers.sort((a, b) => a.order - b.order);
                     item.device_feed.holding_registers.forEach(function(deviceFeedItem) {
                       // console.log(deviceFeedItems)
-                      if(deviceFeedItemsToKeep.includes(deviceFeedItem.alias)){
+                      if(deviceCx7500FeedItemsToKeep.includes(deviceFeedItem.alias)){
+                        deviceFeedItemsFiltered.push(deviceFeedItem)
+                      }
+                      if(deviceFeedItem.alias === 'GPS Latitude'){
+                        lat = deviceFeedItem.value
+                      }
+                      if(deviceFeedItem.alias === 'GPS Longitude'){
+                        lng = deviceFeedItem.value
+                      }
+                      let redStopLampOn = false
+                      let amberWarningLampOn = false
+                      if(deviceFeedItem.alias === 'Red Stop Lamp'){
+                        if(deviceFeedItem.value === 'On, Solid' || deviceFeedItem.value === 'On, Flashing')
+                        {
+                          redStopLampOn = true
+                        }
+                      }
+                      if(deviceFeedItem.alias === 'Amber Warning Lamp'){
+                        if(deviceFeedItem.value === 'On, Solid' || deviceFeedItem.value === 'On, Flashing')
+                        {
+                          amberWarningLampOn = true
+                        }
+                      }
+                      if(redStopLampOn && amberWarningLampOn){
+                        markerColor = "#b40219"
+                      } else if(amberWarningLampOn)
+                      {
+                        markerColor = "#ffbf00"
+                      } else if(redStopLampOn){
+                        markerColor = "#b40219"
+                      }
+
+                      
+                    })
+
+                    const popupText = '<b>' + item.device_alias + '</b>'
+                    + '<br/> <a href="https://www.google.com/maps?saddr=My+Location&daddr='+ lat +',' + lng + '" target="_blank">Get Driving Directions</a>'
+                    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+                    popupText
+                    );
+
+                    if(lat && !isNaN(lat) && lng && !isNaN(lng)){
+                      // console.log("Filtered Items")
+                      // console.log(deviceFeedItemsFiltered)
+                      // Add new marker
+                      const mapboxLocationMarker = new mapboxgl.Marker({ 
+                        // "color": "#b40219" 
+                        "color": markerColor
+                        })
+                      .setLngLat([lng, lat])
+                      .setPopup(popup)
+                      .addTo(mapObj);
+                      bounds.extend([lng, lat])
+                      mapboxLocationMarkers.push(mapboxLocationMarker)
+                      // this.setGoogleDrivingDirectionsLink(lng, lat)
+                    }
+
+                    item.device_feed['holding_registers'] = deviceFeedItemsFiltered
+                  }
+                }
+                })
+
+                this.latestDevicesVfdX600Feed.forEach(function(item) {
+                  if(item.device_feed){
+                    const momentPublished = moment(item.device_feed.published_at)
+                    item.device_feed.publishedAt = momentPublished.format('MM-DD-YYYY [at] hh:mm:ss A') + " (" + momentPublished.fromNow() + ")";
+                  if(item.device_feed.holding_registers) {
+                    const deviceFeedItemsFiltered = []
+                    let lat = null
+                    let lng = null
+                    // Green by default
+                    let markerColor = "#02b40b"
+                    item.device_feed.holding_registers.sort((a, b) => a.order - b.order);
+                    item.device_feed.holding_registers.forEach(function(deviceFeedItem) {
+                      // console.log(deviceFeedItems)
+                      if(deviceVfdX600FeedItemsToKeep.includes(deviceFeedItem.alias)){
                         deviceFeedItemsFiltered.push(deviceFeedItem)
                       }
                       if(deviceFeedItem.alias === 'GPS Latitude'){
@@ -234,7 +356,21 @@ export default defineComponent({
           component: EngineControlModal,
           cssClass: 'my-custom-class',
           componentProps: {
-            title: 'Engine Control',
+            title: 'Control',
+            userDetails: this.userDetails,
+            selectedItem: item,
+            sentinels7FeedApiUrl: this.sentinels7FeedApiUrl
+          },
+        })
+      return modal.present();
+    },
+    async openVfdControlModal(item) {
+      const modal = await modalController
+        .create({
+          component: VfdControlModal,
+          cssClass: 'my-custom-class',
+          componentProps: {
+            title: 'Control',
             userDetails: this.userDetails,
             selectedItem: item,
             sentinels7FeedApiUrl: this.sentinels7FeedApiUrl

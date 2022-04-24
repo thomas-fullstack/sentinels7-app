@@ -8,9 +8,6 @@
     <ion-segment-button value="enginedata">
       <ion-label>Engine Data</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="enginecontrol">
-      <ion-label>Engine Control</ion-label>
-    </ion-segment-button>
   </ion-segment>
   <ion-card v-show="activeSegment == 'deviceinfo'">
     <ion-card-content>
@@ -87,6 +84,22 @@
             </ion-col>
           </ion-row>
         </div>
+
+        <div v-for="(item) in engineCoils" v-bind:key="item.alias">
+          <ion-row>
+            <ion-col size="auto">
+              <ion-card-subtitle float-right v-if="item.alias">{{item.alias}}: <b>{{item.value}}</b> <span v-if="item.value != 'Not Available'">{{item.unit}}</span> </ion-card-subtitle>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <div v-for="(item) in engineDiscreteInputs" v-bind:key="item.alias">
+          <ion-row>
+            <ion-col size="auto">
+              <ion-card-subtitle float-right v-if="item.alias">{{item.alias}}: <b>{{item.value}}</b> <span v-if="item.value != 'Not Available'">{{item.unit}}</span> </ion-card-subtitle>
+            </ion-col>
+          </ion-row>
+        </div>
       </div>
       <!-- Test -->
       <!-- <ion-card-subtitle>Battery Voltage: <b>{{batteryvoltage}}</b> <span v-if="batteryvoltage != 'Not Available'">Volts</span></ion-card-subtitle>
@@ -96,27 +109,12 @@
       <ion-card-subtitle>PI Processor Temperature: <b>{{procTemp}}</b> <span v-if="procTemp != 'Not Available'">&deg;F</span></ion-card-subtitle> -->
     </ion-card-content>
   </ion-card>
-  <ion-card v-show="activeSegment == 'enginecontrol'">
-    <ion-card-content>
-      <ion-card-title>Engine Control</ion-card-title>
-      <ion-card-subtitle>Start Engine: <ion-button color="success" v-on:click="presentAlertConfirmEngineStart">Start</ion-button></ion-card-subtitle>
-      <ion-card-subtitle>Stop Engine: <ion-button color="danger" v-on:click="presentAlertConfirmEngineStop">Stop</ion-button></ion-card-subtitle>
-      <br/>
-      <ion-card-subtitle>Engine Speed (in RPM):
-          <ion-card-subtitle v-if="engineData.length > 1">Current Engine Speed: {{engineData[1].value}} <span v-if="engineData[1].value != 'Not Available'">{{engineData[1].unit}}</span></ion-card-subtitle>
-          <ion-range v-model="engineSpeed" v-on:ionChange="setEngineSpeed($event.target.value)" pin="true" min="800" max="2000" step="20" snaps="true" debounce="500" color="secondary">
-                <ion-label slot="start">800</ion-label>
-                <ion-label slot="end">2000</ion-label>
-          </ion-range>
-      </ion-card-subtitle>
-    </ion-card-content>
-  </ion-card>
 </ion-content>
 </ion-page>
 </template>
 
 <script>
-import { IonPage, loadingController, IonSpinner, IonSelect, IonSelectOption, IonItem, IonRow, IonCol, IonProgressBar , IonSegment, IonSegmentButton, IonCard, IonButton, IonRange, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle, alertController, toastController} from '@ionic/vue';
+import { IonPage, loadingController, IonSpinner, IonSelect, IonSelectOption, IonItem, IonRow, IonCol, IonProgressBar , IonSegment, IonSegmentButton, IonCard, IonButton, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle, alertController, toastController} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -124,7 +122,7 @@ import mapboxgl from 'mapbox-gl';
 import { Plugins } from '@capacitor/core';
 
 export default defineComponent({
-  components: { IonPage, IonSpinner, IonSelect,IonSelectOption,IonItem, IonRow, IonCol, IonProgressBar, IonSegment, IonSegmentButton , IonCard, IonButton, IonRange, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle},
+  components: { IonPage, IonSpinner, IonSelect,IonSelectOption,IonItem, IonRow, IonCol, IonProgressBar, IonSegment, IonSegmentButton , IonCard, IonButton, IonContent, IonLabel, IonCardContent, IonCardSubtitle, IonCardTitle},
   setup() {
     const customAlertOptions = {
       header: 'Switch between your devices: ',
@@ -136,6 +134,8 @@ export default defineComponent({
     return {
       engineData: [],
       deviceData: [],
+      engineCoils: [],
+      engineDiscreteInputs: [],
       deviceId: "Not Available",
       publishedAt: "Not Available",
       engineSpeed: "Not Available",
@@ -387,15 +387,45 @@ export default defineComponent({
             response => {
                 this.latestFeed = response.data
                 // console.log(this.latestFeed)
-                if(this.latestFeed && this.latestFeed.holding_registers.length > 0)
+                // VFD X 600
+                if(this.latestFeed && this.latestFeed.holding_registers.length > 0 && 
+                this.latestFeed.coils && this.latestFeed.coils.length > 0 &&
+                this.latestFeed.discrete_inputs && this.latestFeed.discrete_inputs.length > 0)
                 {
-                    // console.log(this.deviceId)
+                  // console.log(this.latestFeed)
                     this.momentPublished = moment(this.latestFeed.published_at)
                     this.publishedAt = this.momentPublished.format('MM-DD-YYYY [at] hh:mm:ss A') + " (" + this.momentPublished.fromNow() + ")";
-                    this.deviceData = this.latestFeed.holding_registers.slice(0, 8)
-                    this.engineData = this.latestFeed.holding_registers.slice(8, this.latestFeed.holding_registers.length)
-                    console.log(this.deviceData)
-                    console.log(this.engineData)
+                    this.deviceData = this.latestFeed.holding_registers.slice(0, 7)
+                    this.engineData = this.latestFeed.holding_registers.slice(7, this.latestFeed.holding_registers.length)
+                    // console.log(this.deviceData)
+
+                    this.setMapLocation(this.deviceData[4].value, this.deviceData[3].value)
+                    // this.setMapLocation(-98.0335974,30.3080553)
+                    this.engineCoils = this.latestFeed.coils
+                    this.engineDiscreteInputs = this.latestFeed.discrete_inputs
+                    
+                    this.engineData.forEach(function(item) {
+                        if(item.unit === '%'){
+                          item.progressBarVal = parseFloat((item.value / 100).toFixed(2))
+                          // console.log(item)
+                        }
+                    })
+                    this.deviceData.forEach(function(item) {
+                        if(item.unit === '%'){
+                          item.progressBarVal = parseFloat((item.value / 100).toFixed(2))
+                          // console.log(item)
+                        }
+                    })
+                } // controls inc if coils and discrete inputs are not available
+                else if(this.latestFeed && this.latestFeed.holding_registers.length > 0)
+                {
+                    // console.log(this.latestFeed)
+                    this.momentPublished = moment(this.latestFeed.published_at)
+                    this.publishedAt = this.momentPublished.format('MM-DD-YYYY [at] hh:mm:ss A') + " (" + this.momentPublished.fromNow() + ")";
+                    this.deviceData = this.latestFeed.holding_registers.slice(0, 7)
+                    this.engineData = this.latestFeed.holding_registers.slice(7, this.latestFeed.holding_registers.length)
+                    // console.log(this.deviceData)
+                    // console.log(this.engineData)
 
                     this.setMapLocation(this.deviceData[4].value, this.deviceData[3].value)
                     // this.setMapLocation(-98.0335974,30.3080553)
@@ -418,7 +448,9 @@ export default defineComponent({
                     // this.coolantTemperature = this.getValue(this.latestFeed[0].engine_coolant_temperature)
                     // this.procTemp = this.getValue(this.latestFeed[0].proc_temp_deg_c)
                     // this.oilPressure = this.getValue(this.latestFeed[0].engine_oil_pressure)
-                }
+                } 
+
+
                 this.refreshInProgress = false
             }).catch(error => {
                 console.log(error)
@@ -430,26 +462,6 @@ export default defineComponent({
                   }, 200);
                 }
             });
-    },
-    startFeed: function() {
-        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "feed_start":true};
-        const headers = this.getApiHeaders()
-        axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
-        .then(
-            response => {
-                console.log("Engine Data Refresh Started")
-                this.openToast("Engine Data Refresh Started")
-        })
-    },
-    stopFeed: function() {
-        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "feed_stop":true};
-        const headers = this.getApiHeaders()
-        axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
-        .then(
-            response => {
-                console.log("Engine Data Refresh Stopped")
-                this.openToast("Engine Data Refresh Stopped")
-        })
     },
     updateDefaultDeviceIdinAppConfig: function(id) {
         const currentUserEmail = this.userDetails.email;
@@ -465,41 +477,6 @@ export default defineComponent({
                 console.log("Set Device to Default")
                 // this.openToast("Set Device to Default")
         })
-    },
-    startEngine: function() {
-        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "engine_start":true};
-        const headers = this.getApiHeaders()
-        axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
-        .then(
-            response => {
-                console.log("Engine start command issued")
-                this.openToast("Engine start command issued")
-        })
-    },
-    stopEngine: function() {
-        const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "engine_stop":true};
-        const headers = this.getApiHeaders()
-        axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
-        .then(
-            response => {
-                console.log("Engine stop command issued")
-                this.openToast("Engine stop command issued")
-        })
-    },
-    setEngineSpeed: function(setSpeedVal) {
-      this.engineSpeed = setSpeedVal
-      if(this.engineSpeed === parseInt(this.engineSpeed, 10)) {
-        // console.log(this.engineSpeed)
-        // console.log(setSpeedVal)
-          const requestParams = {"device_name": this.selectedDevice, "client_name": this.userDetails.company, "engine_speed":setSpeedVal};
-          const headers = this.getApiHeaders()
-          axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
-          .then(
-              response => {
-                  console.log("Engine speed set command issued at: " + setSpeedVal + " RPM")
-                  this.openToast("Engine speed set command issued at: " + setSpeedVal + " RPM")
-          })
-      }
     }
   },
   mounted() {
