@@ -10,7 +10,7 @@
       <br/>
       <ion-card-subtitle>Engine Speed (in RPM): 
           <ion-card-subtitle v-if="selectedItem.device_feed.holding_registers.length > 1">Current Engine Speed: {{selectedItem.device_feed.holding_registers[3].value}} <span v-if="selectedItem.device_feed.holding_registers[3].value != 'Not Available'">{{selectedItem.device_feed.holding_registers[3].unit}}</span></ion-card-subtitle>
-          <ion-input type="number" v-model="engineSpeed" min="800" max="2000" ></ion-input>
+          <ion-input type="number" v-model.number="engineSpeed" min="800" max="2000" ></ion-input>
           <ion-button v-on:click="setEngineSpeed">Set RPM</ion-button>
       </ion-card-subtitle>
     <ion-button v-on:click="closeModal">Close</ion-button>
