@@ -69,7 +69,7 @@
                 </div>
 
                 <div v-for="(item) in item.device_feed.discrete_inputs" v-bind:key="item.alias">
-                      <ion-card-subtitle float-right v-if="item.alias === 'Red Stop Lamp'">
+                      <ion-card-subtitle float-right v-if="item.alias === 'Red Stop Lamp' || item.alias === 'DC Power Status' || item.alias === 'VFD Run Status Verification'">
                        <span v-if="item.value === 'On'">{{item.alias}}: <b class="color-text-green">{{item.value}}</b>  <ion-badge class="color-full-green">O</ion-badge></span>
                        <span v-else-if="item.value === 'Not Available'">{{item.alias}}: <b class="color-text-black">{{item.value}}</b>  <ion-badge class="color-full-black">O</ion-badge></span>
                        <span v-else>{{item.alias}}: <b class="color-text-red">{{item.value}}</b>  <ion-badge class="color-full-red">O</ion-badge></span>
