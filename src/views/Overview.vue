@@ -41,10 +41,10 @@
               v-for="(feedItemValue, feedItemKey) in latestDevicesCx7500Feed"
               :key="feedItemKey"
             >
-              <button type="button" class="collapsible">
+              <button type="button" class="collapsiblecx7500">
                 {{ feedItemKey }}
               </button>
-              <div class="content">
+              <div class="contentcx7500">
                 <div v-for="item in feedItemValue" v-bind:key="item.device_id">
                   <ion-card>
                     <ion-row>
@@ -170,10 +170,10 @@
               v-for="(feedItemValue, feedItemKey) in latestDevicesVfdX600Feed"
               :key="feedItemKey"
             >
-              <button type="button" class="collapsible">
+              <button type="button" class="collapsiblevfdx600">
                 {{ feedItemKey }}
               </button>
-              <div class="content">
+              <div class="contentvfdx600">
                 <div v-for="item in feedItemValue" v-bind:key="item.device_id">
                   <ion-card>
                     <ion-row>
@@ -727,7 +727,7 @@ export default defineComponent({
       return modal.present();
     },
     initPanels: function () {
-      const coll = document.getElementsByClassName("collapsible");
+      const coll = document.getElementsByClassName("collapsiblecx7500");
       let i;
 
       for (i = 0; i < coll.length; i++) {
@@ -735,16 +735,38 @@ export default defineComponent({
           coll[i].nextElementSibling.style.display = "block";
         } else {
           coll[i].nextElementSibling.style.display = "none";
-          coll[i].classList.toggle("active");
+          coll[i].classList.toggle("activecx7500");
         }
 
         coll[i].addEventListener("click", function () {
-          this.classList.toggle("active");
+          this.classList.toggle("activecx7500");
           const content = this.nextElementSibling;
           if (content.style.display === "block") {
             content.style.display = "none";
           } else {
             content.style.display = "block";
+          }
+        });
+      }
+
+      const coll2 = document.getElementsByClassName("collapsiblevfdx600");
+      let j;
+
+      for (j = 0; j < coll2.length; j++) {
+        if (j === 0) {
+          coll2[j].nextElementSibling.style.display = "block";
+        } else {
+          coll2[j].nextElementSibling.style.display = "none";
+          coll2[j].classList.toggle("activevfdx600");
+        }
+
+        coll2[j].addEventListener("click", function () {
+          this.classList.toggle("activevfdx600");
+          const content2 = this.nextElementSibling;
+          if (content2.style.display === "block") {
+            content2.style.display = "none";
+          } else {
+            content2.style.display = "block";
           }
         });
       }
@@ -852,7 +874,7 @@ ion-spinner {
 }
 
 /* Style the button that is used to open and close the collapsible content */
-.collapsible {
+.collapsiblecx7500 {
   background-color: #eee;
   color: #444;
   cursor: pointer;
@@ -865,20 +887,37 @@ ion-spinner {
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active,
-.collapsible:hover {
+.activecx7500,
+.collapsiblecx7500:hover {
+  background-color: #ccc;
+}
+.activevfdx600,
+.collapsiblevfdx600:hover {
   background-color: #ccc;
 }
 
 /* Style the collapsible content. Note: hidden by default */
-.content {
+.contentcx7500 {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #f1f1f1;
+  max-height: 500px;
+}
+.contentvfdx600 {
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: #f1f1f1;
   max-height: 500px;
 }
 
-.collapsible:after {
+.collapsiblecx7500:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+.collapsiblevfdx600:after {
   content: "\2796"; /* Unicode character for "minus" sign (-) */
   font-size: 13px;
   color: white;
@@ -886,7 +925,10 @@ ion-spinner {
   margin-left: 5px;
 }
 
-.active:after {
+.activecx7500:after {
+  content: "\02795"; /* Unicode character for "plus" sign (+) */
+}
+.activevfdx600:after {
   content: "\02795"; /* Unicode character for "plus" sign (+) */
 }
 </style>
