@@ -1,5 +1,4 @@
 <template>
-
   <ion-page>
     <ion-content>
       <ion-grid>
@@ -37,18 +36,16 @@
                 </ion-col>
               </ion-row>
             </ion-card>
-            <!-- <vue-collapsible-panel-group> -->
 
-            <div v-for="(feedItemValue, feedItemKey) in latestDevicesCx7500Feed" :key="feedItemKey">
-              <!-- <vue-collapsible-panel> -->
-                <!-- <template #title> -->
-                  <!-- {{feedItemKey}} -->
-                <!-- </template> -->
-                <!-- <template #content> -->
-                  <div
-                  v-for="item in feedItemValue"
-                  v-bind:key="item.device_id"
-                >
+            <div
+              v-for="(feedItemValue, feedItemKey) in latestDevicesCx7500Feed"
+              :key="feedItemKey"
+            >
+              <button type="button" class="collapsible">
+                {{ feedItemKey }}
+              </button>
+              <div class="content">
+                <div v-for="item in feedItemValue" v-bind:key="item.device_id">
                   <ion-card>
                     <ion-row>
                       <ion-col size="auto">
@@ -58,7 +55,8 @@
                         >
                         <div
                           v-if="
-                            item.device_feed && item.device_feed.holding_registers
+                            item.device_feed &&
+                            item.device_feed.holding_registers
                           "
                         >
                           <ion-card-subtitle
@@ -97,7 +95,7 @@
                                 ></span
                               >
                             </ion-card-subtitle>
-    
+
                             <ion-card-subtitle
                               float-right
                               v-else-if="item.alias === 'Amber Warning Lamp'"
@@ -121,7 +119,7 @@
                                 ></span
                               >
                             </ion-card-subtitle>
-    
+
                             <ion-card-subtitle
                               float-right
                               v-else-if="item.alias === 'Red Stop Lamp'"
@@ -145,7 +143,7 @@
                                 ></span
                               >
                             </ion-card-subtitle>
-    
+
                             <ion-card-subtitle v-else float-right
                               >{{ item.alias }}: <b>{{ item.value }}</b>
                               <span v-if="item.value != 'Not Available'">{{
@@ -164,194 +162,187 @@
                       </ion-col>
                     </ion-row>
                   </ion-card>
-                  </div>
-                <!-- </template> -->
-              <!-- </vue-collapsible-panel> -->
-              
-
-            </div>
-            
-            <div v-for="(feedItemValue, feedItemKey) in latestDevicesVfdX600Feed" :key="feedItemKey">
-            <!-- <vue-collapsible-panel> -->
-              <!-- <template #title> -->
-                <!-- {{feedItemKey}} -->
-              <!-- </template> -->
-              <!-- <template #content> -->
-                <div
-                v-for="item in feedItemValue"
-                v-bind:key="item.device_id"
-              >
-                <ion-card>
-                  <ion-row>
-                    <ion-col size="auto">
-                      <ion-card-subtitle
-                        >Device Name:
-                        <b>{{ item.device_alias }}</b></ion-card-subtitle
-                      >
-                      <div
-                        v-if="
-                          item.device_feed && item.device_feed.holding_registers
-                        "
-                      >
-                        <ion-card-subtitle
-                          >Last Published At:
-                          <b>{{
-                            item.device_feed.publishedAt
-                          }}</b></ion-card-subtitle
-                        >
-                        <div
-                          v-for="item in item.device_feed.coils"
-                          v-bind:key="item.alias"
-                        >
-                          <ion-card-subtitle
-                            float-right
-                            v-if="
-                              item.alias === 'Auto Mode' ||
-                              item.alias === 'Start/Stop Mode'
-                            "
-                          >
-                            <span v-if="item.value === 'On'"
-                              >{{ item.alias }}:
-                              <b class="color-text-green">{{ item.value }}</b>
-                              <ion-badge class="color-full-green"
-                                >O</ion-badge
-                              ></span
-                            >
-                            <span v-else
-                              >{{ item.alias }}:
-                              <b class="color-text-black">{{ item.value }}</b>
-                              <ion-badge class="color-full-black"
-                                >O</ion-badge
-                              ></span
-                            >
-                          </ion-card-subtitle>
-                        </div>
-  
-                        <div
-                          v-for="item in item.device_feed.discrete_inputs"
-                          v-bind:key="item.alias"
-                        >
-                          <ion-card-subtitle
-                            float-right
-                            v-if="item.alias === 'Red Stop Lamp'"
-                          >
-                            <span v-if="item.value === 'On'"
-                              >{{ item.alias }}:
-                              <b class="color-text-red">{{ item.value }}</b>
-                              <ion-badge class="color-full-red"
-                                >O</ion-badge
-                              ></span
-                            >
-                            <span v-else
-                              >{{ item.alias }}:
-                              <b class="color-text-black">{{ item.value }}</b>
-                              <ion-badge class="color-full-black"
-                                >O</ion-badge
-                              ></span
-                            >
-                          </ion-card-subtitle>
-                          <ion-card-subtitle
-                            float-right
-                            v-else-if="
-                              item.alias === 'VFD Run Status Verification'
-                            "
-                          >
-                            <span v-if="item.value === 'On'"
-                              >{{ item.alias }}:
-                              <b class="color-text-green">{{ item.value }}</b>
-                              <ion-badge class="color-full-green"
-                                >O</ion-badge
-                              ></span
-                            >
-                            <span v-else
-                              >{{ item.alias }}:
-                              <b class="color-text-black">{{ item.value }}</b>
-                              <ion-badge class="color-full-black"
-                                >O</ion-badge
-                              ></span
-                            >
-                          </ion-card-subtitle>
-                          <ion-card-subtitle
-                            float-right
-                            v-else-if="item.alias === 'Backup Power'"
-                          >
-                            <span v-if="item.value === 'On'"
-                              >{{ item.alias }}:
-                              <b class="color-text-red">{{ item.value }}</b>
-                              <ion-badge class="color-full-red"
-                                >O</ion-badge
-                              ></span
-                            >
-                            <span v-else
-                              >{{ item.alias }}:
-                              <b class="color-text-green">{{ item.value }}</b>
-                              <ion-badge class="color-full-green"
-                                >O</ion-badge
-                              ></span
-                            >
-                          </ion-card-subtitle>
-                        </div>
-  
-                        <div
-                          v-for="item in item.device_feed.coils"
-                          v-bind:key="item.alias"
-                        >
-                          <ion-card-subtitle
-                            float-right
-                            v-if="item.alias === 'Amber Warning Lamp'"
-                          >
-                            <span v-if="item.value === 'On'"
-                              >{{ item.alias }}:
-                              <b class="color-text-amber">{{ item.value }}</b>
-                              <ion-badge class="color-full-amber"
-                                >O</ion-badge
-                              ></span
-                            >
-                            <span v-else
-                              >{{ item.alias }}:
-                              <b class="color-text-black">{{ item.value }}</b>
-                              <ion-badge class="color-full-black"
-                                >O</ion-badge
-                              ></span
-                            >
-                          </ion-card-subtitle>
-                        </div>
-  
-                        <div
-                          v-for="item in item.device_feed.holding_registers"
-                          v-bind:key="item.alias"
-                        >
-                          <ion-card-subtitle float-right
-                            >{{ item.alias }}: <b>{{ item.value }}</b>
-                            <span v-if="item.value != 'Not Available'">{{
-                              item.unit
-                            }}</span>
-                          </ion-card-subtitle>
-                        </div>
-  
-                        <ion-button
-                          size="small"
-                          v-on:click="openVfdControlModal(item)"
-                          shape="round"
-                          >Control</ion-button
-                        >
-                      </div>
-                      <div v-else>Device Status: Offline</div>
-                    </ion-col>
-                  </ion-row>
-                </ion-card>
+                </div>
               </div>
-              <!-- </template> -->
-            <!-- </vue-collapsible-panel> -->
             </div>
 
-            <!-- </vue-collapsible-panel-group> -->
+            <div
+              v-for="(feedItemValue, feedItemKey) in latestDevicesVfdX600Feed"
+              :key="feedItemKey"
+            >
+              <button type="button" class="collapsible">
+                {{ feedItemKey }}
+              </button>
+              <div class="content">
+                <div v-for="item in feedItemValue" v-bind:key="item.device_id">
+                  <ion-card>
+                    <ion-row>
+                      <ion-col size="auto">
+                        <ion-card-subtitle
+                          >Device Name:
+                          <b>{{ item.device_alias }}</b></ion-card-subtitle
+                        >
+                        <div
+                          v-if="
+                            item.device_feed &&
+                            item.device_feed.holding_registers
+                          "
+                        >
+                          <ion-card-subtitle
+                            >Last Published At:
+                            <b>{{
+                              item.device_feed.publishedAt
+                            }}</b></ion-card-subtitle
+                          >
+                          <div
+                            v-for="item in item.device_feed.coils"
+                            v-bind:key="item.alias"
+                          >
+                            <ion-card-subtitle
+                              float-right
+                              v-if="
+                                item.alias === 'Auto Mode' ||
+                                item.alias === 'Start/Stop Mode'
+                              "
+                            >
+                              <span v-if="item.value === 'On'"
+                                >{{ item.alias }}:
+                                <b class="color-text-green">{{ item.value }}</b>
+                                <ion-badge class="color-full-green"
+                                  >O</ion-badge
+                                ></span
+                              >
+                              <span v-else
+                                >{{ item.alias }}:
+                                <b class="color-text-black">{{ item.value }}</b>
+                                <ion-badge class="color-full-black"
+                                  >O</ion-badge
+                                ></span
+                              >
+                            </ion-card-subtitle>
+                          </div>
+
+                          <div
+                            v-for="item in item.device_feed.discrete_inputs"
+                            v-bind:key="item.alias"
+                          >
+                            <ion-card-subtitle
+                              float-right
+                              v-if="item.alias === 'Red Stop Lamp'"
+                            >
+                              <span v-if="item.value === 'On'"
+                                >{{ item.alias }}:
+                                <b class="color-text-red">{{ item.value }}</b>
+                                <ion-badge class="color-full-red"
+                                  >O</ion-badge
+                                ></span
+                              >
+                              <span v-else
+                                >{{ item.alias }}:
+                                <b class="color-text-black">{{ item.value }}</b>
+                                <ion-badge class="color-full-black"
+                                  >O</ion-badge
+                                ></span
+                              >
+                            </ion-card-subtitle>
+                            <ion-card-subtitle
+                              float-right
+                              v-else-if="
+                                item.alias === 'VFD Run Status Verification'
+                              "
+                            >
+                              <span v-if="item.value === 'On'"
+                                >{{ item.alias }}:
+                                <b class="color-text-green">{{ item.value }}</b>
+                                <ion-badge class="color-full-green"
+                                  >O</ion-badge
+                                ></span
+                              >
+                              <span v-else
+                                >{{ item.alias }}:
+                                <b class="color-text-black">{{ item.value }}</b>
+                                <ion-badge class="color-full-black"
+                                  >O</ion-badge
+                                ></span
+                              >
+                            </ion-card-subtitle>
+                            <ion-card-subtitle
+                              float-right
+                              v-else-if="item.alias === 'Backup Power'"
+                            >
+                              <span v-if="item.value === 'On'"
+                                >{{ item.alias }}:
+                                <b class="color-text-red">{{ item.value }}</b>
+                                <ion-badge class="color-full-red"
+                                  >O</ion-badge
+                                ></span
+                              >
+                              <span v-else
+                                >{{ item.alias }}:
+                                <b class="color-text-green">{{ item.value }}</b>
+                                <ion-badge class="color-full-green"
+                                  >O</ion-badge
+                                ></span
+                              >
+                            </ion-card-subtitle>
+                          </div>
+
+                          <div
+                            v-for="item in item.device_feed.coils"
+                            v-bind:key="item.alias"
+                          >
+                            <ion-card-subtitle
+                              float-right
+                              v-if="item.alias === 'Amber Warning Lamp'"
+                            >
+                              <span v-if="item.value === 'On'"
+                                >{{ item.alias }}:
+                                <b class="color-text-amber">{{ item.value }}</b>
+                                <ion-badge class="color-full-amber"
+                                  >O</ion-badge
+                                ></span
+                              >
+                              <span v-else
+                                >{{ item.alias }}:
+                                <b class="color-text-black">{{ item.value }}</b>
+                                <ion-badge class="color-full-black"
+                                  >O</ion-badge
+                                ></span
+                              >
+                            </ion-card-subtitle>
+                          </div>
+
+                          <div
+                            v-for="item in item.device_feed.holding_registers"
+                            v-bind:key="item.alias"
+                          >
+                            <ion-card-subtitle float-right
+                              >{{ item.alias }}: <b>{{ item.value }}</b>
+                              <span v-if="item.value != 'Not Available'">{{
+                                item.unit
+                              }}</span>
+                            </ion-card-subtitle>
+                          </div>
+
+                          <ion-button
+                            size="small"
+                            v-on:click="openVfdControlModal(item)"
+                            shape="round"
+                            >Control</ion-button
+                          >
+                        </div>
+                        <div v-else>Device Status: Offline</div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-card>
+                </div>
+              </div>
+            </div>
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-content>
   </ion-page>
-
 </template>
 <script>
 import {
@@ -375,11 +366,6 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import moment from "moment";
 import mapboxgl from "mapbox-gl";
-import {
-  VueCollapsiblePanelGroup,
-  VueCollapsiblePanel,
-} from '@dafcoe/vue-collapsible-panel'
-import '../assets/collapsible-panel.css';
 
 export default defineComponent({
   components: {
@@ -394,8 +380,6 @@ export default defineComponent({
     IonCardSubtitle,
     IonSpinner,
     IonBadge,
-    // VueCollapsiblePanelGroup,
-    // VueCollapsiblePanel,
   },
   setup() {
     return {};
@@ -445,8 +429,8 @@ export default defineComponent({
       };
       return headers;
     },
-    groupBy: function(xs, key) {
-      return xs.reduce(function(rv, x) {
+    groupBy: function (xs, key) {
+      return xs.reduce(function (rv, x) {
         (rv[x[key]] = rv[x[key]] || []).push(x);
         return rv;
       }, {});
@@ -473,212 +457,230 @@ export default defineComponent({
             });
           }
           const sortedCx7500Data = response.data.cx_7500.data.sort(
-                  (a, b) => a.device_order - b.device_order
-                );
+            (a, b) => a.device_order - b.device_order
+          );
           // eslint-disable-next-line
-          this.latestDevicesCx7500Feed = this.groupBy(sortedCx7500Data, 'category_name') 
+          this.latestDevicesCx7500Feed = this.groupBy(
+            sortedCx7500Data,
+            "category_name"
+          );
 
           const sortedVfdX600 = response.data.vfd_x_600.data.sort(
-                  (a, b) => a.device_order - b.device_order
-                );
+            (a, b) => a.device_order - b.device_order
+          );
           // eslint-disable-next-line
-          this.latestDevicesVfdX600Feed = this.groupBy(sortedVfdX600, 'category_name') 
+          this.latestDevicesVfdX600Feed = this.groupBy(
+            sortedVfdX600,
+            "category_name"
+          );
           // console.log(this.latestDevicesCx7500Feed)
           const deviceCx7500FeedItemsToKeep =
             response.data.cx_7500.overview_fields;
           const deviceVfdX600FeedItemsToKeep =
             response.data.vfd_x_600.overview_fields;
-          
-          for (const latestDevicesCx7500FeedItem in this.latestDevicesCx7500Feed) {
-          // .holding_registers
-          this.latestDevicesCx7500Feed[latestDevicesCx7500FeedItem].forEach(function (item) {
-            if (item.device_feed) {
-              const momentPublished = moment(item.device_feed.published_at);
-              item.device_feed.publishedAt =
-                momentPublished.format("MM-DD-YYYY [at] hh:mm:ss A") +
-                " (" +
-                momentPublished.fromNow() +
-                ")";
-              if (item.device_feed.holding_registers) {
-                const deviceFeedItemsFiltered = [];
-                let lat = null;
-                let lng = null;
-                // Green by default
-                let markerColor = "#02b40b";
-                item.device_feed.holding_registers.sort(
-                  (a, b) => a.order - b.order
-                );
-                item.device_feed.holding_registers.forEach(function (
-                  deviceFeedItem
-                ) {
-                  // console.log(deviceFeedItems)
-                  if (
-                    deviceCx7500FeedItemsToKeep.includes(deviceFeedItem.alias)
-                  ) {
-                    deviceFeedItemsFiltered.push(deviceFeedItem);
-                  }
-                  if (deviceFeedItem.alias === "GPS Latitude") {
-                    lat = deviceFeedItem.value;
-                  }
-                  if (deviceFeedItem.alias === "GPS Longitude") {
-                    lng = deviceFeedItem.value;
-                  }
-                  let redStopLampOn = false;
-                  let amberWarningLampOn = false;
-                  if (deviceFeedItem.alias === "Red Stop Lamp") {
-                    if (
-                      deviceFeedItem.value === "On, Solid" ||
-                      deviceFeedItem.value === "On, Flashing"
-                    ) {
-                      redStopLampOn = true;
-                    }
-                  }
-                  if (deviceFeedItem.alias === "Amber Warning Lamp") {
-                    if (
-                      deviceFeedItem.value === "On, Solid" ||
-                      deviceFeedItem.value === "On, Flashing"
-                    ) {
-                      amberWarningLampOn = true;
-                    }
-                  }
-                  if (redStopLampOn && amberWarningLampOn) {
-                    markerColor = "#b40219";
-                  } else if (amberWarningLampOn) {
-                    markerColor = "#ffbf00";
-                  } else if (redStopLampOn) {
-                    markerColor = "#b40219";
-                  }
-                });
 
-                const popupText =
-                  "<b>" +
-                  item.device_alias +
-                  "</b>" +
-                  '<br/> <a href="https://www.google.com/maps?saddr=My+Location&daddr=' +
-                  lat +
-                  "," +
-                  lng +
-                  '" target="_blank">Get Driving Directions</a>';
-                const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-                  popupText
-                );
+          for (const latestDevicesCx7500FeedItem in this
+            .latestDevicesCx7500Feed) {
+            // .holding_registers
+            this.latestDevicesCx7500Feed[latestDevicesCx7500FeedItem].forEach(
+              function (item) {
+                if (item.device_feed) {
+                  const momentPublished = moment(item.device_feed.published_at);
+                  item.device_feed.publishedAt =
+                    momentPublished.format("MM-DD-YYYY [at] hh:mm:ss A") +
+                    " (" +
+                    momentPublished.fromNow() +
+                    ")";
+                  if (item.device_feed.holding_registers) {
+                    const deviceFeedItemsFiltered = [];
+                    let lat = null;
+                    let lng = null;
+                    // Green by default
+                    let markerColor = "#02b40b";
+                    item.device_feed.holding_registers.sort(
+                      (a, b) => a.order - b.order
+                    );
+                    item.device_feed.holding_registers.forEach(function (
+                      deviceFeedItem
+                    ) {
+                      // console.log(deviceFeedItems)
+                      if (
+                        deviceCx7500FeedItemsToKeep.includes(
+                          deviceFeedItem.alias
+                        )
+                      ) {
+                        deviceFeedItemsFiltered.push(deviceFeedItem);
+                      }
+                      if (deviceFeedItem.alias === "GPS Latitude") {
+                        lat = deviceFeedItem.value;
+                      }
+                      if (deviceFeedItem.alias === "GPS Longitude") {
+                        lng = deviceFeedItem.value;
+                      }
+                      let redStopLampOn = false;
+                      let amberWarningLampOn = false;
+                      if (deviceFeedItem.alias === "Red Stop Lamp") {
+                        if (
+                          deviceFeedItem.value === "On, Solid" ||
+                          deviceFeedItem.value === "On, Flashing"
+                        ) {
+                          redStopLampOn = true;
+                        }
+                      }
+                      if (deviceFeedItem.alias === "Amber Warning Lamp") {
+                        if (
+                          deviceFeedItem.value === "On, Solid" ||
+                          deviceFeedItem.value === "On, Flashing"
+                        ) {
+                          amberWarningLampOn = true;
+                        }
+                      }
+                      if (redStopLampOn && amberWarningLampOn) {
+                        markerColor = "#b40219";
+                      } else if (amberWarningLampOn) {
+                        markerColor = "#ffbf00";
+                      } else if (redStopLampOn) {
+                        markerColor = "#b40219";
+                      }
+                    });
 
-                if (lat && !isNaN(lat) && lng && !isNaN(lng)) {
-                  // console.log("Filtered Items")
-                  // console.log(deviceFeedItemsFiltered)
-                  // Add new marker
-                  const mapboxLocationMarker = new mapboxgl.Marker({
-                    // "color": "#b40219"
-                    color: markerColor,
-                  })
-                    .setLngLat([lng, lat])
-                    .setPopup(popup)
-                    .addTo(mapObj);
-                  bounds.extend([lng, lat]);
-                  mapboxLocationMarkers.push(mapboxLocationMarker);
-                  // this.setGoogleDrivingDirectionsLink(lng, lat)
+                    const popupText =
+                      "<b>" +
+                      item.device_alias +
+                      "</b>" +
+                      '<br/> <a href="https://www.google.com/maps?saddr=My+Location&daddr=' +
+                      lat +
+                      "," +
+                      lng +
+                      '" target="_blank">Get Driving Directions</a>';
+                    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+                      popupText
+                    );
+
+                    if (lat && !isNaN(lat) && lng && !isNaN(lng)) {
+                      // console.log("Filtered Items")
+                      // console.log(deviceFeedItemsFiltered)
+                      // Add new marker
+                      const mapboxLocationMarker = new mapboxgl.Marker({
+                        // "color": "#b40219"
+                        color: markerColor,
+                      })
+                        .setLngLat([lng, lat])
+                        .setPopup(popup)
+                        .addTo(mapObj);
+                      bounds.extend([lng, lat]);
+                      mapboxLocationMarkers.push(mapboxLocationMarker);
+                      // this.setGoogleDrivingDirectionsLink(lng, lat)
+                    }
+
+                    item.device_feed["holding_registers"] =
+                      deviceFeedItemsFiltered;
+                  }
                 }
-
-                item.device_feed["holding_registers"] = deviceFeedItemsFiltered;
               }
-            }
-          });
+            );
           }
           // console.log(this.latestDevicesCx7500Feed)
 
-          for (const latestDevicesVfdX600FeedItem in this.latestDevicesVfdX600Feed) {
-          this.latestDevicesVfdX600Feed[latestDevicesVfdX600FeedItem].forEach(function (item) {
-            if (item.device_feed) {
-              const momentPublished = moment(item.device_feed.published_at);
-              item.device_feed.publishedAt =
-                momentPublished.format("MM-DD-YYYY [at] hh:mm:ss A") +
-                " (" +
-                momentPublished.fromNow() +
-                ")";
-              if (item.device_feed.holding_registers) {
-                const deviceFeedItemsFiltered = [];
-                let lat = null;
-                let lng = null;
-                // Green by default
-                let markerColor = "#02b40b";
-                item.device_feed.holding_registers.sort(
-                  (a, b) => a.order - b.order
-                );
-                item.device_feed.holding_registers.forEach(function (
-                  deviceFeedItem
-                ) {
-                  // console.log(deviceFeedItems)
-                  if (
-                    deviceVfdX600FeedItemsToKeep.includes(deviceFeedItem.alias)
-                  ) {
-                    deviceFeedItemsFiltered.push(deviceFeedItem);
-                  }
-                  if (deviceFeedItem.alias === "GPS Latitude") {
-                    lat = deviceFeedItem.value;
-                  }
-                  if (deviceFeedItem.alias === "GPS Longitude") {
-                    lng = deviceFeedItem.value;
-                  }
-                  let redStopLampOn = false;
-                  let amberWarningLampOn = false;
-                  if (deviceFeedItem.alias === "Red Stop Lamp") {
-                    if (
-                      deviceFeedItem.value === "On, Solid" ||
-                      deviceFeedItem.value === "On, Flashing"
+          for (const latestDevicesVfdX600FeedItem in this
+            .latestDevicesVfdX600Feed) {
+            this.latestDevicesVfdX600Feed[latestDevicesVfdX600FeedItem].forEach(
+              function (item) {
+                if (item.device_feed) {
+                  const momentPublished = moment(item.device_feed.published_at);
+                  item.device_feed.publishedAt =
+                    momentPublished.format("MM-DD-YYYY [at] hh:mm:ss A") +
+                    " (" +
+                    momentPublished.fromNow() +
+                    ")";
+                  if (item.device_feed.holding_registers) {
+                    const deviceFeedItemsFiltered = [];
+                    let lat = null;
+                    let lng = null;
+                    // Green by default
+                    let markerColor = "#02b40b";
+                    item.device_feed.holding_registers.sort(
+                      (a, b) => a.order - b.order
+                    );
+                    item.device_feed.holding_registers.forEach(function (
+                      deviceFeedItem
                     ) {
-                      redStopLampOn = true;
-                    }
-                  }
-                  if (deviceFeedItem.alias === "Amber Warning Lamp") {
-                    if (
-                      deviceFeedItem.value === "On, Solid" ||
-                      deviceFeedItem.value === "On, Flashing"
-                    ) {
-                      amberWarningLampOn = true;
-                    }
-                  }
-                  if (redStopLampOn && amberWarningLampOn) {
-                    markerColor = "#b40219";
-                  } else if (amberWarningLampOn) {
-                    markerColor = "#ffbf00";
-                  } else if (redStopLampOn) {
-                    markerColor = "#b40219";
-                  }
-                });
+                      // console.log(deviceFeedItems)
+                      if (
+                        deviceVfdX600FeedItemsToKeep.includes(
+                          deviceFeedItem.alias
+                        )
+                      ) {
+                        deviceFeedItemsFiltered.push(deviceFeedItem);
+                      }
+                      if (deviceFeedItem.alias === "GPS Latitude") {
+                        lat = deviceFeedItem.value;
+                      }
+                      if (deviceFeedItem.alias === "GPS Longitude") {
+                        lng = deviceFeedItem.value;
+                      }
+                      let redStopLampOn = false;
+                      let amberWarningLampOn = false;
+                      if (deviceFeedItem.alias === "Red Stop Lamp") {
+                        if (
+                          deviceFeedItem.value === "On, Solid" ||
+                          deviceFeedItem.value === "On, Flashing"
+                        ) {
+                          redStopLampOn = true;
+                        }
+                      }
+                      if (deviceFeedItem.alias === "Amber Warning Lamp") {
+                        if (
+                          deviceFeedItem.value === "On, Solid" ||
+                          deviceFeedItem.value === "On, Flashing"
+                        ) {
+                          amberWarningLampOn = true;
+                        }
+                      }
+                      if (redStopLampOn && amberWarningLampOn) {
+                        markerColor = "#b40219";
+                      } else if (amberWarningLampOn) {
+                        markerColor = "#ffbf00";
+                      } else if (redStopLampOn) {
+                        markerColor = "#b40219";
+                      }
+                    });
 
-                const popupText =
-                  "<b>" +
-                  item.device_alias +
-                  "</b>" +
-                  '<br/> <a href="https://www.google.com/maps?saddr=My+Location&daddr=' +
-                  lat +
-                  "," +
-                  lng +
-                  '" target="_blank">Get Driving Directions</a>';
-                const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-                  popupText
-                );
+                    const popupText =
+                      "<b>" +
+                      item.device_alias +
+                      "</b>" +
+                      '<br/> <a href="https://www.google.com/maps?saddr=My+Location&daddr=' +
+                      lat +
+                      "," +
+                      lng +
+                      '" target="_blank">Get Driving Directions</a>';
+                    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+                      popupText
+                    );
 
-                if (lat && !isNaN(lat) && lng && !isNaN(lng)) {
-                  // console.log("Filtered Items")
-                  // console.log(deviceFeedItemsFiltered)
-                  // Add new marker
-                  const mapboxLocationMarker = new mapboxgl.Marker({
-                    // "color": "#b40219"
-                    color: markerColor,
-                  })
-                    .setLngLat([lng, lat])
-                    .setPopup(popup)
-                    .addTo(mapObj);
-                  bounds.extend([lng, lat]);
-                  mapboxLocationMarkers.push(mapboxLocationMarker);
-                  // this.setGoogleDrivingDirectionsLink(lng, lat)
+                    if (lat && !isNaN(lat) && lng && !isNaN(lng)) {
+                      // console.log("Filtered Items")
+                      // console.log(deviceFeedItemsFiltered)
+                      // Add new marker
+                      const mapboxLocationMarker = new mapboxgl.Marker({
+                        // "color": "#b40219"
+                        color: markerColor,
+                      })
+                        .setLngLat([lng, lat])
+                        .setPopup(popup)
+                        .addTo(mapObj);
+                      bounds.extend([lng, lat]);
+                      mapboxLocationMarkers.push(mapboxLocationMarker);
+                      // this.setGoogleDrivingDirectionsLink(lng, lat)
+                    }
+
+                    item.device_feed["holding_registers"] =
+                      deviceFeedItemsFiltered;
+                  }
                 }
-
-                item.device_feed["holding_registers"] = deviceFeedItemsFiltered;
               }
-            }
-          });
+            );
           }
 
           // console.log(this.latestDevicesVfdX600Feed)
@@ -724,6 +726,29 @@ export default defineComponent({
       });
       return modal.present();
     },
+    initPanels: function () {
+      const coll = document.getElementsByClassName("collapsible");
+      let i;
+
+      for (i = 0; i < coll.length; i++) {
+        if (i === 0) {
+          coll[i].nextElementSibling.style.display = "block";
+        } else {
+          coll[i].nextElementSibling.style.display = "none";
+          coll[i].classList.toggle("active");
+        }
+
+        coll[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+          const content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
+    },
   },
   mounted() {
     // If url contains dev or localhost point API calls to dev
@@ -749,6 +774,10 @@ export default defineComponent({
     this.timer = setInterval(() => {
       this.getCompanyDevicesFeed();
     }, 30000);
+
+    setTimeout(() => {
+      this.initPanels();
+    }, 1000);
   },
 });
 </script>
@@ -820,5 +849,44 @@ ion-spinner {
   top: 5px;
   width: 18px;
   height: 18px;
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.collapsible:hover {
+  background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #f1f1f1;
+  max-height: 500px;
+}
+
+.collapsible:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\02795"; /* Unicode character for "plus" sign (+) */
 }
 </style>
