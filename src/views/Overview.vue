@@ -799,7 +799,7 @@ export default defineComponent({
 
     setTimeout(() => {
       this.initPanels();
-    }, 1000);
+    }, 2000);
   },
 });
 </script>
@@ -886,11 +886,25 @@ ion-spinner {
   font-size: 15px;
 }
 
+/* Style the button that is used to open and close the collapsible content */
+.collapsiblevfdx600 {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
 .activecx7500,
 .collapsiblecx7500:hover {
   background-color: #ccc;
 }
+
 .activevfdx600,
 .collapsiblevfdx600:hover {
   background-color: #ccc;
@@ -903,6 +917,7 @@ ion-spinner {
   background-color: #f1f1f1;
   max-height: 500px;
 }
+
 .contentvfdx600 {
   overflow-y: scroll;
   overflow-x: hidden;
@@ -917,6 +932,7 @@ ion-spinner {
   float: right;
   margin-left: 5px;
 }
+
 .collapsiblevfdx600:after {
   content: "\2796"; /* Unicode character for "minus" sign (-) */
   font-size: 13px;
