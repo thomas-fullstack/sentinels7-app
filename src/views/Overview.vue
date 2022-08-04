@@ -799,7 +799,7 @@ export default defineComponent({
 
     setTimeout(() => {
       this.initPanels();
-    }, 2000);
+    }, 5000);
   },
 });
 </script>
