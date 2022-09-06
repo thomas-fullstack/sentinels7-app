@@ -197,6 +197,7 @@
                           <div
                             v-for="item in item.device_feed.coils"
                             v-bind:key="item.alias"
+                            style="padding: 10px"
                           >
                             <ion-card-subtitle
                               float-right
@@ -338,7 +339,13 @@
                 </div>
               </div>
             </div>
+
+            <deviceData ref="new_device"/>
+
           </ion-col>
+
+
+
         </ion-row>
       </ion-grid>
     </ion-content>
@@ -357,7 +364,7 @@ import {
   IonCardSubtitle,
   IonSpinner,
   IonBadge,
-  alertController,
+  //alertController,
   modalController,
 } from "@ionic/vue";
 import EngineControlModal from "./EngineControlModal.vue";
@@ -366,7 +373,7 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import moment from "moment";
 import mapboxgl from "mapbox-gl";
-
+import deviceData from  "./components/device_data.vue"
 export default defineComponent({
   components: {
     IonContent,
@@ -380,6 +387,7 @@ export default defineComponent({
     IonCardSubtitle,
     IonSpinner,
     IonBadge,
+    deviceData
   },
   setup() {
     return {};
@@ -795,6 +803,7 @@ export default defineComponent({
     this.getCompanyDevicesFeed();
     this.timer = setInterval(() => {
       this.getCompanyDevicesFeed();
+      this.$refs.new_device.getDeviceData();
     }, 30000);
 
     setTimeout(() => {
