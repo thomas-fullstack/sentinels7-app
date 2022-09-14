@@ -340,7 +340,7 @@
               </div>
             </div>
 
-            <deviceData ref="new_device"/>
+            <externalDevices ref="new_device"/>
 
           </ion-col>
 
@@ -373,7 +373,7 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import moment from "moment";
 import mapboxgl from "mapbox-gl";
-import deviceData from  "./components/device_data.vue"
+import externalDevices from "./components/externalDevices.vue"
 export default defineComponent({
   components: {
     IonContent,
@@ -387,7 +387,7 @@ export default defineComponent({
     IonCardSubtitle,
     IonSpinner,
     IonBadge,
-    deviceData
+    externalDevices
   },
   setup() {
     return {};
@@ -472,6 +472,7 @@ export default defineComponent({
             sortedCx7500Data,
             "category_name"
           );
+          console.log(this.latestDevicesCx7500Feed)
 
           const sortedVfdX600 = response.data.vfd_x_600.data.sort(
             (a, b) => a.device_order - b.device_order
@@ -803,7 +804,7 @@ export default defineComponent({
     this.getCompanyDevicesFeed();
     this.timer = setInterval(() => {
       this.getCompanyDevicesFeed();
-      this.$refs.new_device.getDeviceData();
+      this.$refs.new_device.getexternalDevices();
     }, 30000);
 
     setTimeout(() => {
