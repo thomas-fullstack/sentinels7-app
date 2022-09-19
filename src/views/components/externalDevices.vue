@@ -11,7 +11,7 @@ export  default defineComponent({
 components:{singleCategory},
   data(){
     return {
-      active:false,
+      active:true,
 
       deviceFeedUrl:"",
       devicesCategory:[],

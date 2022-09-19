@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="toggleCollapse" type="button" class="collapsible" >
+    <button @click="toggleCollapse" type="button" :key="categoryName" class="collapsible" >
       {{categoryName}}
     </button>
     <div v-if="active" class="content">
@@ -50,6 +50,11 @@ export  default defineComponent({
       active:false,
       deviceName:"",
     }},
+  mounted() {
+    if(this.devices.length>0){
+      this.active = true
+    }
+  },
   methods:{
     toggleCollapse(e){
       this.active =!this.active;
@@ -62,21 +67,22 @@ export  default defineComponent({
 
 <style>
 
-.active:after {
-  content: "\2796"; /* Unicode character for "minus" sign (-) */
 
-}
 .collapsible:hover {
   background-color: #ccc;
 }
 .collapsible:after {
-  content: "\02795"; /* Unicode character for "plus" sign (+) */
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+
   font-size: 13px;
   color: white;
   float: right;
   margin-left: 5px;
 }
+.active:after {
+  content: "\02795"; /* Unicode character for "plus" sign (+) */
 
+}
 .collapsible {
   margin-top: 10px;
   background-color: #eee;
@@ -106,4 +112,5 @@ export  default defineComponent({
   justify-content: center;
   margin-bottom: 15px;
 }
+
 </style>

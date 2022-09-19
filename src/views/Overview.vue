@@ -340,7 +340,7 @@
               </div>
             </div>
 
-            <externalDevices ref="new_device"/>
+            <externalDevices ref="externalDevices"/>
 
           </ion-col>
 
@@ -472,7 +472,7 @@ export default defineComponent({
             sortedCx7500Data,
             "category_name"
           );
-          console.log(this.latestDevicesCx7500Feed)
+          //console.log(this.latestDevicesCx7500Feed)
 
           const sortedVfdX600 = response.data.vfd_x_600.data.sort(
             (a, b) => a.device_order - b.device_order
@@ -804,7 +804,7 @@ export default defineComponent({
     this.getCompanyDevicesFeed();
     this.timer = setInterval(() => {
       this.getCompanyDevicesFeed();
-      this.$refs.new_device.getexternalDevices();
+      this.$refs.externalDevices.getDeviceData();
     }, 30000);
 
     setTimeout(() => {
