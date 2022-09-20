@@ -69,6 +69,7 @@ export default defineComponent({
       sentinels7FeedApiUrl: ''
     };
   },
+
   methods: {
     async openToast(msg, color) {
       const toast = await toastController

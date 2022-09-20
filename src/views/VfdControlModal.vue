@@ -137,7 +137,7 @@ export default defineComponent({
       return toast.present();
     },
     startMotor: function() {
-        const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "motor_start":true};
+        const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "motor_start":true};
         const headers = this.getApiHeaders()
         axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
         .then(
@@ -147,7 +147,7 @@ export default defineComponent({
         })
     },
     stopMotor: function() {
-        const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "motor_stop":true};
+        const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "motor_stop":true};
         const headers = this.getApiHeaders()
         axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
         .then(
@@ -157,7 +157,7 @@ export default defineComponent({
         })
     },
     setAutoMode: function() {
-        const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "auto_mode":true};
+        const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "auto_mode":true};
         const headers = this.getApiHeaders()
         axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
         .then(
@@ -167,7 +167,7 @@ export default defineComponent({
         })
     },
     setManualMode: function() {
-        const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "manual_mode":true};
+        const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "manual_mode":true};
         const headers = this.getApiHeaders()
         axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
         .then(
@@ -177,7 +177,7 @@ export default defineComponent({
         })
     },
     setFaultReset: function() {
-        const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "fault_reset":true};
+        const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "fault_reset":true};
         const headers = this.getApiHeaders()
         axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
         .then(
@@ -191,7 +191,7 @@ export default defineComponent({
         {
           // console.log(this.motorSpeed)
           // console.log(setSpeedVal)
-            const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "motor_speed":this.motorSpeed};
+            const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "motor_speed":this.motorSpeed};
             const headers = this.getApiHeaders()
             axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
             .then(
@@ -209,7 +209,7 @@ export default defineComponent({
         {
           // console.log(this.motorSpeed)
           // console.log(setSpeedVal)
-            const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "target_setpoint":this.targetSetpoint};
+            const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "target_setpoint":this.targetSetpoint};
             const headers = this.getApiHeaders()
             axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
             .then(
@@ -227,7 +227,7 @@ export default defineComponent({
         {
           // console.log(this.motorSpeed)
           // console.log(setSpeedVal)
-            const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "high_pressure_limit":this.highPressureLimit};
+            const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "high_pressure_limit":this.highPressureLimit};
             const headers = this.getApiHeaders()
             axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
             .then(
@@ -245,7 +245,7 @@ export default defineComponent({
         {
           // console.log(this.motorSpeed)
           // console.log(setSpeedVal)
-            const requestParams = {"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "high_pressure_shutdown":this.highPressureShutdown};
+            const requestParams = {"email":this.userDetails.email,"device_name": this.selectedItem.device_alias, "client_name": this.userDetails.company, "high_pressure_shutdown":this.highPressureShutdown};
             const headers = this.getApiHeaders()
             axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
             .then(

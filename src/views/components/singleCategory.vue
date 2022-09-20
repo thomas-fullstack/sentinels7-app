@@ -9,7 +9,7 @@
           <ion-card-subtitle>Device Name: {{device.device_alias}}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <div style="margin-top: 10px">
+          <div  v-if="device.device_feed && device.device_feed.holding_registers " style="margin-top: 10px">
             <div v-for="data in device.device_feed.holding_registers" :key="data.alias.replaceAll(' ','_')">
               <div class="c-details">
                 <div>
@@ -25,7 +25,15 @@
                 </div>
               </div>
             </div>
+            <ion-button
+                v-if="canControl"
+                size="small"
+                shape="round"
+            >Control</ion-button
+            >
           </div>
+          <div v-else>Device Status: Offline</div>
+
         </ion-card-content>
       </ion-card>
     </div>
@@ -50,6 +58,14 @@ export  default defineComponent({
       active:false,
       deviceName:"",
     }},
+  computed:{
+    canControl:()=>{
+      const user = JSON.parse(localStorage.getItem('user'))
+      const configs = user.userAppConfig;
+      const canControl = configs.filter((item)=>item.key==="user_can_control")
+      return canControl[0].value==='true';
+    }
+  },
   mounted() {
     if(this.devices.length>0){
       this.active = true
