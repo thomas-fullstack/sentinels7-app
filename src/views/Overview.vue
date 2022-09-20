@@ -197,6 +197,7 @@
                           <div
                             v-for="item in item.device_feed.coils"
                             v-bind:key="item.alias"
+                            style="padding: 10px"
                           >
                             <ion-card-subtitle
                               float-right
@@ -338,7 +339,13 @@
                 </div>
               </div>
             </div>
+
+            <externalDevices ref="externalDevices"/>
+
           </ion-col>
+
+
+
         </ion-row>
       </ion-grid>
     </ion-content>
@@ -357,7 +364,7 @@ import {
   IonCardSubtitle,
   IonSpinner,
   IonBadge,
-  alertController,
+  //alertController,
   modalController,
 } from "@ionic/vue";
 import EngineControlModal from "./EngineControlModal.vue";
@@ -366,7 +373,7 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import moment from "moment";
 import mapboxgl from "mapbox-gl";
-
+import externalDevices from "./components/externalDevices.vue"
 export default defineComponent({
   components: {
     IonContent,
@@ -380,6 +387,7 @@ export default defineComponent({
     IonCardSubtitle,
     IonSpinner,
     IonBadge,
+    externalDevices
   },
   setup() {
     return {};
@@ -464,6 +472,7 @@ export default defineComponent({
             sortedCx7500Data,
             "category_name"
           );
+          //console.log(this.latestDevicesCx7500Feed)
 
           const sortedVfdX600 = response.data.vfd_x_600.data.sort(
             (a, b) => a.device_order - b.device_order
@@ -795,6 +804,7 @@ export default defineComponent({
     this.getCompanyDevicesFeed();
     this.timer = setInterval(() => {
       this.getCompanyDevicesFeed();
+      this.$refs.externalDevices.getDeviceData();
     }, 30000);
 
     setTimeout(() => {
