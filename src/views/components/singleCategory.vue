@@ -19,8 +19,11 @@
                   {{data.value}} {{data.unit}}
                 </div>
                 <div v-else>
-                  <div v-if="data.type==='bool'">
-                    <span :style="{color:parseInt(data.value)===0?'red':'green'}"><b>{{data.unit[data.value]}}</b></span>
+                  <div v-if="data.type==='bool' && data.alias!=='Float Position'">
+                    <span :style="{color:parseInt(data.value)===0?'green':'red'}"><b>{{data.unit[data.value]}}</b></span>
+                  </div>
+                  <div v-else>
+                    <span><b>{{data.unit[data.value]}}</b></span>
                   </div>
                 </div>
               </div>
