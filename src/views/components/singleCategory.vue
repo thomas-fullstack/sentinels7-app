@@ -45,14 +45,15 @@
 
 <script>
 import {defineComponent} from "vue";
-import {IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSpinner } from '@ionic/vue';
+import {IonCard, IonCardHeader, IonButton, IonCardSubtitle, IonCardContent } from '@ionic/vue';
 
 export  default defineComponent({
   components: {
     IonCard,
     IonCardHeader,
     IonCardSubtitle,
-    IonCardContent
+    IonCardContent,
+    IonButton
   },
   name: "singleCategory",
   props:['categoryName','devices'],
