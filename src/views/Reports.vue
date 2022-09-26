@@ -170,6 +170,11 @@ export default defineComponent({
         console.log("Called getDevicesList")
         const requestParams = {"client_id": this.userDetails.company};
         const headers = this.getApiHeaders()
+
+
+
+
+
         axios.post(this.sentinels7FeedApiUrl, requestParams,{ headers })
         .then(
             response => {
