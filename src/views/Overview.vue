@@ -140,6 +140,9 @@ export default defineComponent({
       // Add zoom and rotation controls to the map.
       this.mapObj.addControl(new mapboxgl.NavigationControl());
 
+      this.mapObj.addControl(new mapboxgl.FullscreenControl());
+
+
       this.timer = setInterval(() => {
         this.mapObj.resize();
       }, 1500);
