@@ -39,12 +39,16 @@
                               <span v-if="item.value === 'Key in Auto'"
                               >{{ item.alias }}:
                                 <b class="color-text-green">{{ item.value }}</b>
-                                <ion-badge class="color-full-green"
-                                >O</ion-badge
+                                <ion-badge class="color-full-green">O</ion-badge
                                 ></span
                               >
-                    <span v-else-if="item.value === 'Not Available'"
-                    >{{ item.alias }}:
+                    <span v-else-if="item.value === 'Not Available'">{{ item.alias }}:
+                                <b class="color-text-black">{{ item.value }}</b>
+                                <ion-badge class="color-full-black"
+                                >O</ion-badge
+                                ></span
+                    >
+                    <span v-else-if="item.value === 'Key in Manual'">{{ item.alias }}:
                                 <b class="color-text-black">{{ item.value }}</b>
                                 <ion-badge class="color-full-black"
                                 >O</ion-badge
@@ -133,7 +137,6 @@
 </template>
 
 <script>
-//v-on:click="openEngineControlModal(item)"
 import {
   IonRow,
   IonCol,
@@ -143,8 +146,9 @@ import {
   IonBadge,
 } from "@ionic/vue";
 export default {
-  components: {
+  emits: ["openControlModal"],
 
+  components: {
     IonRow,
     IonCol,
     IonButton,

@@ -57,7 +57,11 @@ components:{singleCategory},
 
         const result = await axios.post(this.deviceFeedUrl, requestParams, { headers });
         if(result.status === 200){
-          //console.log(result.data)
+          if(result.data.includes('errorMessage')){
+            this.openToast(result.data.errorMessage)
+
+            return ;
+          }
           const sortedDevices = result.data.sort(
               (a, b) => a.device_order - b.device_order
           );
@@ -69,7 +73,7 @@ components:{singleCategory},
         }
 
       }catch (e) {
-        console.error(e);
+        //console.error(e);
       }finally {
         this.refreshInProgress = false;
       }
