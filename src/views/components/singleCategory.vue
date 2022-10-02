@@ -67,7 +67,7 @@ export  default defineComponent({
       const user = JSON.parse(localStorage.getItem('user'))
       const configs = user.userAppConfig;
       const canControl = configs.filter((item)=>item.key==="user_can_control")
-      return canControl[0].value==='true';
+      return canControl && canControl[0] && canControl[0].value ? canControl[0].value==='true': false;
     }
   },
   mounted() {
