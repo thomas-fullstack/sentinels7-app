@@ -152,7 +152,9 @@
                             </ion-card-subtitle>
                           </div>
                           <ion-button
-                            size="small"
+                              v-if="canControl"
+
+                              size="small"
                             v-on:click="openEngineControlModal(item)"
                             shape="round"
                             >Control</ion-button
@@ -326,11 +328,11 @@
                           </div>
 
                           <ion-button
+                            v-if="canControl"
                             size="small"
                             v-on:click="openVfdControlModal(item)"
                             shape="round"
-                            >Control</ion-button
-                          >
+                            >Control</ion-button>
                         </div>
                         <div v-else>Device Status: Offline</div>
                       </ion-col>
@@ -391,6 +393,14 @@ export default defineComponent({
   },
   setup() {
     return {};
+  },
+  computed:{
+    canControl:()=>{
+      const user = JSON.parse(localStorage.getItem('user'))
+      const configs = user.userAppConfig;
+      const canControl = configs.filter((item)=>item.key==="user_can_control")
+      return canControl && canControl[0] && canControl[0].value ? canControl[0].value==='true': false;
+    }
   },
   data() {
     return {

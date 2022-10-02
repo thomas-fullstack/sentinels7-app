@@ -9,7 +9,7 @@
           <ion-card-subtitle>Device Name: {{device.device_alias}}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <div style="margin-top: 10px">
+          <div  v-if="device.device_feed && device.device_feed.holding_registers " style="margin-top: 10px">
             <div v-for="data in device.device_feed.holding_registers" :key="data.alias.replaceAll(' ','_')">
               <div class="c-details">
                 <div>
@@ -19,13 +19,24 @@
                   {{data.value}} {{data.unit}}
                 </div>
                 <div v-else>
-                  <div v-if="data.type==='bool'">
-                    <span :style="{color:parseInt(data.value)===0?'red':'green'}"><b>{{data.unit[data.value]}}</b></span>
+                  <div v-if="data.type==='bool' && data.alias!=='Float Position'">
+                    <span :style="{color:parseInt(data.value)===0?'green':'red'}"><b>{{data.unit[data.value]}}</b></span>
+                  </div>
+                  <div v-else>
+                    <span><b>{{data.unit[data.value]}}</b></span>
                   </div>
                 </div>
               </div>
             </div>
+            <ion-button
+                v-if="canControl"
+                size="small"
+                shape="round"
+            >Control</ion-button
+            >
           </div>
+          <div v-else>Device Status: Offline</div>
+
         </ion-card-content>
       </ion-card>
     </div>
@@ -34,14 +45,15 @@
 
 <script>
 import {defineComponent} from "vue";
-import {IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSpinner } from '@ionic/vue';
+import {IonCard, IonCardHeader, IonButton, IonCardSubtitle, IonCardContent } from '@ionic/vue';
 
 export  default defineComponent({
   components: {
     IonCard,
     IonCardHeader,
     IonCardSubtitle,
-    IonCardContent
+    IonCardContent,
+    IonButton
   },
   name: "singleCategory",
   props:['categoryName','devices'],
@@ -50,6 +62,14 @@ export  default defineComponent({
       active:false,
       deviceName:"",
     }},
+  computed:{
+    canControl:()=>{
+      const user = JSON.parse(localStorage.getItem('user'))
+      const configs = user.userAppConfig;
+      const canControl = configs.filter((item)=>item.key==="user_can_control")
+      return canControl && canControl[0] && canControl[0].value ? canControl[0].value==='true': false;
+    }
+  },
   mounted() {
     if(this.devices.length>0){
       this.active = true
