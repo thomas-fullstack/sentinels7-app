@@ -453,6 +453,14 @@ export default defineComponent({
         return rv;
       }, {});
     },
+    checkDeviceHasPermission(deviceId){
+      const config =this.userDetails.userAppConfig;
+      const filterUserDevices = config.filter(item=>item.key==='filter_user_devices')[0]
+
+      const permittedDevices = filterUserDevices.value.split(',').map(item=>parseInt(item,10))
+      return permittedDevices.includes(deviceId);
+
+    },
     getCompanyDevicesFeed: function () {
       this.refreshInProgress = true;
       // console.log("Called getCompanyDevicesFeed")
@@ -462,6 +470,9 @@ export default defineComponent({
       const headers = this.getApiHeaders();
       const mapObj = this.mapObj;
       const mapboxLocationMarkers = this.mapboxLocationMarkers;
+
+
+
       axios
         .post(this.sentinels7FeedApiUrl, requestParams, { headers })
         .then((response) => {
@@ -477,22 +488,28 @@ export default defineComponent({
           const sortedCx7500Data = response.data.cx_7500.data.sort(
             (a, b) => a.device_order - b.device_order
           );
+
+          //filter permitted devices
+          const filteredPermittedCx7500Devices = sortedCx7500Data.filter(item=>this.checkDeviceHasPermission(item.device_id));
           // eslint-disable-next-line
           this.latestDevicesCx7500Feed = this.groupBy(
-            sortedCx7500Data,
+              filteredPermittedCx7500Devices,
             "category_name"
           );
-          //console.log(this.latestDevicesCx7500Feed)
 
           const sortedVfdX600 = response.data.vfd_x_600.data.sort(
             (a, b) => a.device_order - b.device_order
           );
+
+          const filteredPermittedVfb600Devices = sortedVfdX600.filter(item=>this.checkDeviceHasPermission(item.device_id));
+
           // eslint-disable-next-line
           this.latestDevicesVfdX600Feed = this.groupBy(
-            sortedVfdX600,
+              filteredPermittedVfb600Devices,
             "category_name"
           );
-          // console.log(this.latestDevicesCx7500Feed)
+
+
           const deviceCx7500FeedItemsToKeep =
             response.data.cx_7500.overview_fields;
           const deviceVfdX600FeedItemsToKeep =
@@ -814,7 +831,7 @@ export default defineComponent({
     this.getCompanyDevicesFeed();
     this.timer = setInterval(() => {
       this.getCompanyDevicesFeed();
-      this.$refs.externalDevices.getDeviceData();
+      this.$refs.externalDevices?.getDeviceData();
     }, 30000);
 
     setTimeout(() => {
