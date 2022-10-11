@@ -37,25 +37,25 @@
                       v-if="item.alias === 'Key Position'"
                   >
                               <span v-if="item.value === 'Key in Auto'"
-                              >{{ item.alias }}:
-                                <b class="color-text-green">{{ item.value }}</b>
-                                <ion-badge class="color-full-green"
+                              >{{ item.alias }} <ion-badge class="color-full-green"
                                 >O</ion-badge
-                                ></span
+                                >:
+                                <b class="color-text-green">{{ item.value }}</b>
+                                </span
                               >
                     <span v-else-if="item.value === 'Not Available'"
-                    >{{ item.alias }}:
-                                <b class="color-text-black">{{ item.value }}</b>
-                                <ion-badge class="color-full-black"
+                    >{{ item.alias }} <ion-badge class="color-full-black"
                                 >O</ion-badge
-                                ></span
+                                >:
+                                <b class="color-text-black">{{ item.value }}</b>
+                                </span
                     >
                     <span v-else
-                    >{{ item.alias }}:
-                                <b class="color-text-red">{{ item.value }}</b>
-                                <ion-badge class="color-full-red"
+                    >{{ item.alias }} <ion-badge class="color-full-red"
                                 >O</ion-badge
-                                ></span
+                                >:
+                                <b class="color-text-red">{{ item.value }}</b>
+                                </span
                     >
                   </ion-card-subtitle>
 
@@ -68,18 +68,18 @@
                                   item.value === 'On, Solid' ||
                                   item.value === 'On, Flashing'
                                 "
-                              >{{ item.alias }}:
-                                <b class="color-text-amber">{{ item.value }}</b>
-                                <ion-badge class="color-full-amber"
+                              >{{ item.alias }} <ion-badge class="color-full-amber"
                                 >O</ion-badge
-                                ></span
+                                >:
+                                <b class="color-text-amber">{{ item.value }}</b>
+                                </span
                               >
                     <span v-else
-                    >{{ item.alias }}:
-                                <b class="color-text-black">{{ item.value }}</b>
-                                <ion-badge class="color-full-black"
+                    >{{ item.alias }} <ion-badge class="color-full-black"
                                 >O</ion-badge
-                                ></span
+                                >:
+                                <b class="color-text-black">{{ item.value }}</b>
+                                </span
                     >
                   </ion-card-subtitle>
 
@@ -92,18 +92,18 @@
                                   item.value === 'On, Solid' ||
                                   item.value === 'On, Flashing'
                                 "
-                              >{{ item.alias }}:
-                                <b class="color-text-red">{{ item.value }}</b>
-                                <ion-badge class="color-full-red"
+                              >{{ item.alias }} <ion-badge class="color-full-red"
                                 >O</ion-badge
-                                ></span
+                                > :
+                                <b class="color-text-red">{{ item.value }}</b>
+                                </span
                               >
                     <span v-else
-                    >{{ item.alias }}:
-                                <b class="color-text-black">{{ item.value }}</b>
-                                <ion-badge class="color-full-black"
+                    >{{ item.alias }} <ion-badge class="color-full-red"
                                 >O</ion-badge
-                                ></span
+                                > :
+                                <b class="color-text-black">{{ item.value }}</b>
+                                </span
                     >
                   </ion-card-subtitle>
 
@@ -133,7 +133,6 @@
 </template>
 
 <script>
-//v-on:click="openEngineControlModal(item)"
 import {
   IonRow,
   IonCol,
@@ -143,8 +142,9 @@ import {
   IonBadge,
 } from "@ionic/vue";
 export default {
-  components: {
+  emits: ["openControlModal"],
 
+  components: {
     IonRow,
     IonCol,
     IonButton,
