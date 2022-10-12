@@ -503,7 +503,7 @@ export default defineComponent({
       vm.selectedDevice = selectedDevice
       console.log("Default Device Id:" + defaultDeviceId)
       
-    }, 5000);
+    }, 10000);
 
   },
   beforeUnmount() {

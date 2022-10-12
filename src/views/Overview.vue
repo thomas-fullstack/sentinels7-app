@@ -542,7 +542,7 @@ export default defineComponent({
     this.timer = setInterval(() => {
       this.getCompanyDevicesFeed();
       this.$refs.externalDevices?.getDeviceData();
-    }, 30000);
+    }, 10000);
 
     setTimeout(() => {
       this.initPanels();
