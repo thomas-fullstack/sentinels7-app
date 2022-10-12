@@ -65,6 +65,8 @@ components:{singleCategory},
           const sortedDevices = result.data.sort(
               (a, b) => a.device_order - b.device_order
           );
+          
+          
 
           //get permitted device
           const permitted = sortedDevices.filter(item=>this.checkDeviceHasPermission(item.device_id))
