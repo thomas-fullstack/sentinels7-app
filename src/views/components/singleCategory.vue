@@ -10,7 +10,7 @@
         </ion-card-header>
         <ion-card-content>
           <div  v-if="device.device_feed && device.device_feed.holding_registers " style="margin-top: 10px">
-            <div v-for="data in device.device_feed.holding_registers" :key="data.alias.replaceAll(' ','_')">
+            <div class="c-props" v-for="data in device.device_feed.holding_registers" :key="data.alias.replaceAll(' ','_')">
               <div class="c-details">
                 <div>
                   {{data.alias}}
@@ -85,8 +85,13 @@ export  default defineComponent({
 
 </script>
 
-<style>
-
+<style scoped>
+  .c-props{
+    padding: 0px 5px;
+  }
+.c-props:nth-child(odd){
+  background-color: rgba(68, 68, 68, 0.178);
+}
 
 .collapsible:hover {
   background-color: #ccc;
