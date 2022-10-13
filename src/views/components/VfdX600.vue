@@ -176,9 +176,24 @@
 </template>
 
 <script>
-//                    v-on:click="openVfdControlModal(item)"
-
+import {
+  IonRow,
+  IonCol,
+  IonButton,
+  IonCard,
+  IonCardSubtitle,
+  IonBadge,
+} from "@ionic/vue";
 export default {
+  emits: ["openVfdControlModal"],
+  components: {
+    IonRow,
+    IonCol,
+    IonButton,
+    IonCard,
+    IonCardSubtitle,
+    IonBadge,
+  },
   name: "VfdX600",
   props:['DevicesVfdX600Feed','canControl']
 }

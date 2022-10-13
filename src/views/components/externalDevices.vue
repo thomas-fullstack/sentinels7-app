@@ -46,7 +46,7 @@ components:{singleCategory},
 
       const permittedDevices = filterUserDevices.value.split(',').map(item=>parseInt(item,10))
       return permittedDevices.includes(deviceId);
-
+ 
     },
     async getDeviceData(){
       this.refreshInProgress = true;
@@ -57,11 +57,14 @@ components:{singleCategory},
 
         const result = await axios.post(this.deviceFeedUrl, requestParams, { headers });
         if(result.status === 200){
-          //console.log(result.data)
+          if(result.data.includes('errorMessage')){
+            this.openToast(result.data.errorMessage)
+
+            return ;
+          }
           const sortedDevices = result.data.sort(
               (a, b) => a.device_order - b.device_order
           );
-          //const sortedDevices=[{"category_name": "Control By Web Device Type 1", "device_alias": "Control By Web Device 1", "device_feed": {"device_id": "1618573673", "holding_registers": [{"unit": ["Low", "High"], "alias": "Float Position", "order": 0, "type": "bool", "value": "0"}, {"unit": ["Off", "On"], "alias": "Siren/Beacon", "order": 1, "type": "bool", "value": "0"}, {"unit": "ft", "alias": "Level 1", "order": 2, "type": "number", "value": "-3.75"}, {"unit": "ft", "alias": "Level 2", "order": 3, "type": "number", "value": "-1.25"}, {"unit": "psi", "alias": "Pressure", "order": 4, "type": "number", "value": "-1.25"}, {"unit": "BPM", "alias": "Analog Flow Rate", "order": 5, "type": "number", "value": "-68"}, {"unit": "BPM", "alias": "Pulse Flow Rate", "order": 6, "type": "number", "value": "0.00"}, {"unit": "Volts", "alias": "Battery Voltage", "order": 7, "type": "number", "value": "9.0"}], "published_at": ""}, "device_id": 14, "device_serial": "1618573673", "device_type": "control_by_web_type1", "device_order": 1}];
 
           //get permitted device
           const permitted = sortedDevices.filter(item=>this.checkDeviceHasPermission(item.device_id))
@@ -69,7 +72,7 @@ components:{singleCategory},
         }
 
       }catch (e) {
-        console.error(e);
+        //console.error(e);
       }finally {
         this.refreshInProgress = false;
       }

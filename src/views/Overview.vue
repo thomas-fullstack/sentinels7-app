@@ -39,7 +39,7 @@
             </ion-card>
 
             <Cx7500Feed
-                @openControlModal="openEngineControlModal"
+                v-on:openControlModal="openEngineControlModal"
                 :can-control="canControl"
                 :latest-devices-cx7500-feed="latestDevicesCx7500Feed"/>
 
@@ -47,6 +47,7 @@
                 :can-control="canControl"
                 :DevicesVfdX600Feed="latestDevicesVfdX600Feed"
                 @openVfdControlModal="openEngineControlModal"  />
+
             <externalDevices ref="externalDevices"/>
 
           </ion-col>
@@ -271,7 +272,8 @@ export default defineComponent({
                           redStopLampOn = true;
                         }
                       }
-                      if (deviceFeedItem.alias === "Amber Warning Lamp") {
+                      if (deviceFeedItem.alias === "Am" +
+                          "ber Warning Lamp") {
                         if (
                           deviceFeedItem.value === "On, Solid" ||
                           deviceFeedItem.value === "On, Flashing"
@@ -324,7 +326,7 @@ export default defineComponent({
               }
             );
           }
-          // console.log(this.latestDevicesCx7500Feed)
+          //console.log(this.latestDevicesCx7500Feed)
 
           for (const latestDevicesVfdX600FeedItem in this
             .latestDevicesVfdX600Feed) {
@@ -540,7 +542,7 @@ export default defineComponent({
     this.timer = setInterval(() => {
       this.getCompanyDevicesFeed();
       this.$refs.externalDevices?.getDeviceData();
-    }, 30000);
+    }, 10000);
 
     setTimeout(() => {
       this.initPanels();
